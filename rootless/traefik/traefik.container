@@ -22,8 +22,8 @@ PublishPort=80:80
 PublishPort=443:443
 PublishPort=8081:8081
 
-Secret=/mnt/cache/service/secrets/cf_token:/run/secrets/cf_token:ro,rprivate,rbind
-Secret=/mnt/cache/service/secrets/cf_token:/run/secrets/cf_token:ro,rprivate,rbind
+Secret=cf_token,target=/run/secrets/cf_token
+Secret=htpasswd,target=/run/secrets/htpasswd
 
 Exec=--global.checkNewVersion=true \
     --global.sendAnonymousUsage=true \
@@ -62,8 +62,7 @@ Exec=--global.checkNewVersion=true \
     --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.delayBeforeCheck=90 \
     --metrics.prometheus=true \
     --metrics.prometheus.buckets=0.1,0.3,1.2,5.0
-Healthcheck=CMD traefik healthcheck --ping
-TimeoutStartSec=900
+HealthCmd=CMD traefik healthcheck --ping
 
 Label="traefik.enable=true"
 Label=# HTTP Routers
