@@ -1,0 +1,21 @@
+[Unit]
+Description=Discord Redbot
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=discord-redbot
+Image=docker.io/phasecorex/red-discordbot:latest
+EnvironmentFile=./discord-redbot.env
+Volume=/mnt/cache/appdata/discord-redbot:/data
+Network=t3_proxy
+NoNewPrivileges=true
+UIDMap=0:100999:1
+GIDMap=0:100099:1
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

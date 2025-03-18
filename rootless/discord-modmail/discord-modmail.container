@@ -1,0 +1,21 @@
+[Unit]
+Description=Discord Modmail Bot
+Wants=network-online.target
+After=network-online.target mongo-modmail.service
+
+[Container]
+ContainerName=discord-modmail
+Image=ghcr.io/modmail-dev/modmail:master
+EnvironmentFile=./discord-modmail.env
+Volume=/mnt/cache/appdata/discord_modmail:/usr/src/app/data
+Network=t3_proxy
+NoNewPrivileges=true
+UIDMap=0:100999:1
+GIDMap=0:100099:1
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
