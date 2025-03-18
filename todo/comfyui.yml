@@ -1,0 +1,32 @@
+services:
+  comfyui:
+    image: yanwk/comfyui-boot:latest
+    container_name: comfyui
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - $COMFYUI_PORT:8188
+    environment:
+      CLI_ARGS: "--lowvram"
+    volumes:
+      - $APPDATADIR/comfyui:/home/runner
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.comfyui-rtr.entrypoints=websecure"
+      - "traefik.http.routers.comfyui-rtr.rule=Host(`gen.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.comfyui-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.comfyui-rtr.service=comfyui-svc"
+      - "traefik.http.services.comfyui-svc.loadbalancer.server.port=8188"

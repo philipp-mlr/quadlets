@@ -1,0 +1,41 @@
+services:
+  # Glances - System Information
+  glances:
+    image: nicolargo/glances:latest
+    container_name: glances
+    networks:
+      - t3_proxy
+      - default
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "$GLANCES_PORT:61208"
+    pid: host
+    volumes:
+      #- $APPDATADIR/glances/glances.conf:/glances/conf/glances.conf # Use this if you want to add a glances.conf file
+      #- $MEDIADIR:/data/data:ro
+      - /mnt/disks/:/mnt/disks:ro
+      - /mnt/cache/:/mnt/cache:ro
+      - /run/user/1000/podman/podman.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
+    environment:
+      # GLANCES_OPT: "-C /glances/conf/glances.conf --quiet --export influxdb"
+      # GLANCES_OPT: "--export influxdb"
+      GLANCES_OPT: "-w"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.glances-rtr.entrypoints=websecure"
+      - "traefik.http.routers.glances-rtr.rule=Host(`glances.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.glances-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.glances-rtr.service=glances-svc"
+      - "traefik.http.services.glances-svc.loadbalancer.server.port=61208"

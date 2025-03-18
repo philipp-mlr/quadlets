@@ -1,0 +1,45 @@
+services:
+  # Homepage - Application Dashboard
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    networks:
+      - t3_proxy
+    security_opt:
+    - no-new-privileges:true
+    restart: always
+    expose:
+      - 3000    
+    cap_add:
+      - NET_RAW
+    volumes:
+      - $APPDATADIR/homepage:/app/config
+      - $APPDATADIR/homepage/icons:/app/public/icons
+      - /run/user/1000/podman/podman.sock:/var/run/docker.sock
+    environment:
+      TZ: $TZ
+      HOMEPAGE_VAR_PLEX_TOKEN: $HOMEPAGE_VAR_PLEX_TOKEN
+      HOMEPAGE_VAR_TAUTULLI_API_KEY: $HOMEPAGE_VAR_TAUTULLI_API_KEY
+      HOMEPAGE_VAR_OVERSEERR_TOKEN: $OVERSEERR_API_KEY
+      HOMEPAGE_VAR_RADARR_TOKEN: $RADARR_API_KEY
+      HOMEPAGE_VAR_SONARR_TOKEN: $SONARR_API_KEY
+      HOMEPAGE_VAR_READARR_TOKEN: $READARR_API_KEY
+      HOMEPAGE_VAR_QBITTORRENT_PASSWORD: $HOMEPAGE_VAR_QBITTORRENT_PASSWORD
+      HOMEPAGE_VAR_SABNZBD_API_KEY: $HOMEPAGE_VAR_SABNZBD_API_KEY
+      HOMEPAGE_VAR_ADGUARDHOME_PASSWORD: $HOMEPAGE_VAR_ADGUARDHOME_PASSWORD
+      HOMEPAGE_VAR_NEXTCLOUD_TOKEN: $HOMEPAGE_VAR_NEXTCLOUD_TOKEN
+      HOMEPAGE_VAR_PAPERLESS_API_KEY: $HOMEPAGE_VAR_PAPERLESS_API_KEY
+      HOMEPAGE_VAR_PORTAINER_API_KEY: $HOMEPAGE_VAR_PORTAINER_API_KEY
+      HOMEPAGE_VAR_CROWDSEC_USERNAME: $HOMEPAGE_VAR_CROWDSEC_USERNAME
+      HOMEPAGE_VAR_CROWDSEC_PASSWORD: $HOMEPAGE_VAR_CROWDSEC_PASSWORD
+      HOMEPAGE_VAR_IMMICH_API_KEY: $HOMEPAGE_VAR_IMMICH_API_KEY
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.homepage-rtr.entrypoints=websecure"
+      - "traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.homepage-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.homepage-rtr.service=homepage-svc"
+      - "traefik.http.services.homepage-svc.loadbalancer.server.port=3000"

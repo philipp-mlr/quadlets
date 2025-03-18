@@ -1,0 +1,28 @@
+services:
+  website:
+    image: ghcr.io/philipp-mlr/philipp.software:main
+    container_name: website
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - $WEBSITE_PORT:1323
+    environment:
+      PUID: $PUID
+      PGID: $PGID
+      TZ: $TZ
+      CF_TURNSTILE_SECRET: $CF_TURNSTILE_SECRET
+      PHILIPP_SOFTWARE_EMAIL_PASSWORD: $PHILIPP_SOFTWARE_EMAIL_PASSWORD
+
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.website-rtr.entrypoints=websecure"
+      - "traefik.http.routers.website-rtr.rule=Host(`$PUBLIC_DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.website-rtr.middlewares=chain-no-auth-public@file"
+      ## HTTP Services
+      - "traefik.http.routers.website-rtr.service=website-svc"
+      - "traefik.http.services.website-svc.loadbalancer.server.port=1323"

@@ -1,0 +1,64 @@
+services:
+  # Gluetun - VPN Client for Docker Containers and More
+  # Gluetun only for use by torrent clients + on demand lan devices.
+  # Arr apps do not need VPN (not recommended), unless you have ISP/country restrictions.
+  gluetun:
+    image: qmcgaw/gluetun:v3.38.0
+    container_name: gluetun
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    ports:
+      - "$QBITTORRENT_PORT:8095" # Exposing qBittorrent through Docker Host LAN IP
+      - "$SABNZBD_PORT:8085"
+      - 8888:8888/tcp # HTTP proxy
+      - 8388:8388/tcp # Shadowsocks
+      - 8388:8388/udp # Shadowsocks
+    volumes:
+      - $APPDATADIR/gluetun:/gluetun
+    environment:
+      TZ: $TZ
+      # Wireguard
+      VPN_SERVICE_PROVIDER: custom
+      VPN_TYPE: wireguard
+      VPN_ENDPOINT_IP: $VPN_ENDPOINT_IP
+      VPN_ENDPOINT_PORT: $VPN_ENDPOINT_PORT
+      WIREGUARD_PUBLIC_KEY: $WIREGUARD_PUBLIC_KEY
+      WIREGUARD_PRIVATE_KEY: $WIREGUARD_PRIVATE_KEY
+      WIREGUARD_PRESHARED_KEY: $WIREGUARD_PRESHARED_KEY
+      WIREGUARD_ADDRESSES: $WIREGUARD_ADDRESSES
+      PUID: $PUID
+      PGID: $PGID
+    labels:
+      - "traefik.enable=true"
+      ## Gluetun Built-in HTTP control server
+      - "traefik.http.routers.gluetun-rtr.rule=Host(`gluetun.$DOMAINNAME`)"
+      - "traefik.http.routers.gluetun-rtr.service=gluetun-svc"
+      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8000"
+      #### qBittorrent
+      ## HTTP Routers
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=websecure"
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
+      ## Middlewares
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-authelia@file" # qBittorrent
+      ## HTTP Services
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
+      - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8095" # qBittorrent
+      #### SABnzbd
+      ## HTTP Routers Auth
+      - "traefik.http.routers.sabnzbd-rtr.entrypoints=websecure"
+      - "traefik.http.routers.sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)"
+      - "traefik.http.routers.sabnzbd-rtr.priority=99"
+      ## Middlewares
+      - "traefik.http.routers.sabnzbd-rtr-bypass.middlewares=chain-authelia@file"
+      - "traefik.http.routers.sabnzbd-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.sabnzbd-rtr.service=sabnzbd-svc"
+      - "traefik.http.routers.sabnzbd-rtr-bypass.service=sabnzbd-svc"
+      - "traefik.http.services.sabnzbd-svc.loadbalancer.server.port=8085"

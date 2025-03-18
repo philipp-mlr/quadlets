@@ -1,0 +1,33 @@
+services:
+  # calibre-web - a web app that offers a clean and intuitive interface for browsing, reading, and downloading eBooks
+  calibre-web:
+    image: crocodilestick/calibre-web-automated:latest
+    container_name: calibre-web
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - $CALIBREWEB_PORT:8083
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      DOCKER_MODS: linuxserver/mods:universal-calibre #optional
+    volumes:
+      - $APPDATADIR/calibre_web/config:/config
+      - $APPDATADIR/calibre_web/library:/calibre-library
+      - $APPDATADIR/calibre_web/consume:/cwa-book-ingest
+      - $MEDIADIR/books:/books
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.calibre-web-rtr.tls=true"
+      - "traefik.http.routers.calibre-web-rtr.entrypoints=websecure"
+      - "traefik.http.routers.calibre-web-rtr.rule=Host(`books.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.calibre-web-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.calibre-web-rtr.service=calibre-web-svc"
+      - "traefik.http.services.calibre-web-svc.loadbalancer.server.port=8083"

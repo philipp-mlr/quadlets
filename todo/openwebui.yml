@@ -1,0 +1,28 @@
+services:
+  openwebui:
+    image: "ghcr.io/open-webui/open-webui:cuda"
+    container_name: openwebui
+    networks:
+      - t3_proxy
+    restart: always
+    ports:
+      - "$OPENWEBUI_PORT:8080"
+    volumes:
+      - "$APPDATADIR/open_webui:/app/backend/data"
+    #network_mode: "slirp4netns:allow_host_loopback=true"
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers API
+      - "traefik.http.routers.openwebui-rtr-bypass.entrypoints=websecure"
+      - "traefik.http.routers.openwebui-rtr-bypass.rule=Host(`ai.$DOMAINNAME`) && (PathPrefix(`/api`))"
+      - "traefik.http.routers.openwebui-rtr-bypass.priority=100"
+      ## HTTP Routers
+      - "traefik.http.routers.openwebui-rtr.entrypoints=websecure"
+      - "traefik.http.routers.openwebui-rtr.rule=Host(`ai.$DOMAINNAME`)"
+      - "traefik.http.routers.openwebui-rtr.priority=99"
+      ## Middlewares
+      - "traefik.http.routers.openwebui-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.openwebui-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.openwebui-rtr.service=openwebui-svc"
+      - "traefik.http.services.openwebui-svc.loadbalancer.server.port=8080"

@@ -1,0 +1,15 @@
+services:
+  # Discord GSM - Game server monitor
+  discord-gsm:
+    container_name: discord-gsm
+    image: discordgsm/discord-game-server-monitor:latest
+    networks:
+      t3_proxy:
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    volumes:
+      - "/mnt/cache/appdata/discord-gsm:/usr/src/app/data"
+    command: 'python main.py'
+    environment_file:
+      - ./discord-gsm.env

@@ -6,7 +6,10 @@ After=network-online.target
 [Container]
 ContainerName=traefik
 Image=traefik:latest
-EnvironmentFile=./traefik.env
+Environment=CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
+Environment=HTPASSWD_FILE=/run/secrets/htpasswd
+Environment=DOMAINNAME=akatosh.dev
+Environment=PUBLIC_DOMAINNAME=philipp.software
 
 Volume=/mnt/cache/appdata/traefik/rules/:/rules
 Volume=/mnt/cache/appdata/traefik/acme/acme.json:/acme.json
@@ -18,6 +21,9 @@ Network=t3_proxy
 PublishPort=80:80
 PublishPort=443:443
 PublishPort=8081:8081
+
+Secret=/mnt/cache/service/secrets/cf_token:/run/secrets/cf_token:ro,rprivate,rbind
+Secret=/mnt/cache/service/secrets/cf_token:/run/secrets/cf_token:ro,rprivate,rbind
 
 Exec=--global.checkNewVersion=true \
     --global.sendAnonymousUsage=true \

@@ -1,0 +1,29 @@
+services:
+  filebrowser:
+    image: hurlenko/filebrowser:latest
+    container_name: filebrowser
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    user: "0:0"
+    ports:
+      - $FILEBROWSER_PORT:8080
+    volumes:
+      - $SERVICEDIR:/data/service
+      - $MEDIADIR:/data/media
+      - $APPDATADIR:/data/appdata
+      - $APPDATADIR/filebrowser:/config
+    environment:
+      FB_BASEURL: /
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.filebrowser-rtr.entrypoints=websecure"
+      - "traefik.http.routers.filebrowser-rtr.rule=Host(`files.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.filebrowser-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.filebrowser-rtr.service=filebrowser-svc"
+      - "traefik.http.services.filebrowser-svc.loadbalancer.server.port=8080"
