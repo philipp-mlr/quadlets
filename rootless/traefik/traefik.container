@@ -88,6 +88,7 @@ Label="traefik.http.routers.traefik-rtr.middlewares=chain-authelia@file" # For G
 
 [Service]
 Restart=always
+TimeoutStartSec=900
 
 [Install]
 WantedBy=multi-user.target
