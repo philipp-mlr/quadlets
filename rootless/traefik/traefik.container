@@ -6,10 +6,7 @@ After=network-online.target
 [Container]
 ContainerName=traefik
 Image=traefik:latest
-Environment=CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
-Environment=HTPASSWD_FILE=/run/secrets/htpasswd
-Environment=DOMAINNAME=akatosh.dev
-Environment=PUBLIC_DOMAINNAME=philipp.software
+EnvironmentFile=./traefik.env
 
 Volume=/mnt/cache/appdata/traefik/rules/:/rules
 Volume=/mnt/cache/appdata/traefik/acme/acme.json:/acme.json
