@@ -9,9 +9,10 @@ Image=docker.io/mongo
 EnvironmentFile=./mongo-modmail.env
 Volume=/mnt/cache/appdata/mongo_modmail:/data/db
 Network=t3_proxy
+
 NoNewPrivileges=true
-UIDMap=0:100999:1
-GIDMap=0:100099:1
+
+AutoUpdate=registry
 
 [Service]
 Restart=always

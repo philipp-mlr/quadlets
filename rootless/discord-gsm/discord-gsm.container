@@ -11,9 +11,10 @@ EnvironmentFile=./discord-gsm.env
 Volume=/mnt/cache/appdata/discord-gsm:/usr/src/app/data
 Network=t3_proxy
 Exec=python main.py
+
 NoNewPrivileges=true
-UIDMap=0:100999:1
-GIDMap=0:100099:1
+
+AutoUpdate=registry
 
 [Service]
 Restart=always

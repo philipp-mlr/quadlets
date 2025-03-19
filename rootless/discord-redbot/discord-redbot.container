@@ -9,9 +9,10 @@ Image=docker.io/phasecorex/red-discordbot:latest
 EnvironmentFile=./discord-redbot.env
 Volume=/mnt/cache/appdata/discord-redbot:/data
 Network=t3_proxy
+
 NoNewPrivileges=true
-UIDMap=0:100999:1
-GIDMap=0:100099:1
+
+AutoUpdate=registry
 
 [Service]
 Restart=always

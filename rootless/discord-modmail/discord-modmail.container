@@ -9,9 +9,10 @@ Image=ghcr.io/modmail-dev/modmail:master
 EnvironmentFile=./discord-modmail.env
 Volume=/mnt/cache/appdata/discord_modmail:/usr/src/app/data
 Network=t3_proxy
+
 NoNewPrivileges=true
-UIDMap=0:100999:1
-GIDMap=0:100099:1
+
+AutoUpdate=registry
 
 [Service]
 Restart=always

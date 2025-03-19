@@ -82,6 +82,10 @@ Label="traefik.http.routers.ping.service=ping@internal"
 ## Middlewares
 Label="traefik.http.routers.traefik-rtr.middlewares=chain-authelia@file" # For Google OAuth
 
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
 [Service]
 Restart=always
 TimeoutStartSec=900
