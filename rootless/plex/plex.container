@@ -6,7 +6,7 @@ After=network-online.target
 [Container]
 ContainerName=plex
 Image=docker.io/plexinc/pms-docker:latest
-EnvironmentFile=plex.env
+EnvironmentFile=./plex.env
 
 Volume=/mnt/cache/appdata/plexms:/config
 Volume=/mnt/disks/downloads:/data/downloads
@@ -36,15 +36,15 @@ Secret=plex_claim,target=/run/secrets/plex_claim
 
 NoNewPrivileges=true
 
-Labels="traefik.enable=true"
+Label="traefik.enable=true"
 ## HTTP Routers
-Labels="traefik.http.routers.plex-rtr.entrypoints=websecure"
-Labels="traefik.http.routers.plex-rtr.rule=Host(`plex.akatosh.dev`)"
+Label="traefik.http.routers.plex-rtr.entrypoints=websecure"
+Label="traefik.http.routers.plex-rtr.rule=Host(`plex.akatosh.dev`)"
 ## Middlewares
-Labels="traefik.http.routers.plex-rtr.middlewares=chain-no-auth-compress@file"
+Label="traefik.http.routers.plex-rtr.middlewares=chain-no-auth-compress@file"
 ## HTTP Servicesnoauth
-Labels="traefik.http.routers.plex-rtr.service=plex-svc"
-Labels="traefik.http.services.plex-svc.loadbalancer.server.port=32400"
+Label="traefik.http.routers.plex-rtr.service=plex-svc"
+Label="traefik.http.services.plex-svc.loadbalancer.server.port=32400"
 
 [Service]
 Restart=always
