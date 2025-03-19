@@ -5,7 +5,7 @@ After=network-online.target
 
 [Container]
 ContainerName=plex
-Image=docker.io/plexinc/pms-docker:plexpass
+Image=docker.io/plexinc/pms-docker:latest
 EnvironmentFile=plex.env
 
 Volume=/mnt/cache/appdata/plexms:/config
