@@ -1,0 +1,47 @@
+[Unit]
+Description=Paperless Document Management System
+Wants=network-online.target
+After=network-online.target postgres-paperless.service redis-paperless.service gotenberg.service tika.service
+
+[Container]
+ContainerName=paperless
+Image=docker.io/paperlessngx/paperless-ngx:latest
+EnvironmentFile=paperless.env
+
+Volume=/mnt/cache/appdata/paperless/data:/usr/src/paperless/data
+Volume=/mnt/cache/appdata/paperless/media:/usr/src/paperless/media
+Volume=/mnt/cache/appdata/paperless/export:/usr/src/paperless/export
+Volume=/mnt/cache/appdata/paperless/consume:/usr/src/paperless/consume
+
+Network=t3_proxy
+
+PublishPort=8000:8000
+
+Secret=postgres_password,target=/run/secrets/postgres_password
+Secret=paperless_key,target=/run/secrets/paperless_key
+Secret=paperless_password,target=/run/secrets/paperless_password
+Secret=paperless_email,target=/run/secrets/paperless_email
+Secret=paperless_user,target=/run/secrets/paperless_user
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.paperless-rtr.entrypoints=websecure"
+Label="traefik.http.routers.paperless-rtr.rule=Host(`dms.akatosh.dev`)"
+## Middlewares
+Label="traefik.http.routers.paperless-rtr.middlewares=chain-authelia@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.paperless-rtr.service=paperless-svc"
+Label="traefik.http.services.paperless-svc.loadbalancer.server.port=8000"
+
+HealthCmd="curl -fs -S --max-time 2 http://localhost:8000"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

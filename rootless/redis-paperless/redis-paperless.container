@@ -1,0 +1,23 @@
+[Unit]
+Description=Task scheduler and advanced features
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=redis-paperless
+Image=docker.io/redis:latest
+
+Network=t3_proxy
+
+Volume=/mnt/cache/appdata/redis_paperless:/data
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+[Unit]
+Description=Detect and extract metadata from documents
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=tika
+Image=ghcr.io/paperless-ngx/tika:latest
+
+Network=t3_proxy
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
