@@ -1,0 +1,54 @@
+[Unit]
+Description=Plex Media Server
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=plex
+Image=docker.io/plexinc/pms-docker:plexpass
+EnvironmentFile=plex.env
+
+Volume=/mnt/cache/appdata/plexms:/config
+Volume=/mnt/disks/downloads:/data/downloads
+Volume=/mnt/disks/media:/data/media
+# Optional. See why the folders below are mounted as volumes https://github.com/htpcBeginner/docker-traefik/discussions/147
+Volume=/mnt/disks/media/metadata/plex/Cache:/config/Library/Application Support/Plex Media Server/Cache
+Volume=/mnt/disks/media/metadata/plex/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
+Volume=/mnt/disks/media/metadata/plex/Media:/config/Library/Application Support/Plex Media Server/Media
+# Offload transcoding to RAM if you have enough RAM
+Volume=/dev/shm:/transcode
+
+Network=t3_proxy
+
+PublishPort=32400:32400/tcp
+PublishPort=3005:3005/tcp
+PublishPort=8324:8324/tcp
+PublishPort=32469:32469/tcp
+PublishPort=32410:32410/udp
+PublishPort=32412:32412/udp
+PublishPort=32413:32413/udp
+PublishPort=32414:32414/udp
+PublishPort=33400:33400
+
+AddDevice=/dev/dri
+
+Secret=plex_claim,target=/run/secrets/plex_claim
+
+NoNewPrivileges=true
+
+Labels="traefik.enable=true"
+## HTTP Routers
+Labels="traefik.http.routers.plex-rtr.entrypoints=websecure"
+Labels="traefik.http.routers.plex-rtr.rule=Host(`plex.akatosh.dev`)"
+## Middlewares
+Labels="traefik.http.routers.plex-rtr.middlewares=chain-no-auth-compress@file"
+## HTTP Servicesnoauth
+Labels="traefik.http.routers.plex-rtr.service=plex-svc"
+Labels="traefik.http.services.plex-svc.loadbalancer.server.port=32400"
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
