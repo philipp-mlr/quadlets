@@ -102,18 +102,6 @@ update_config() {
   start_services "$config_dir"
 }
 
-script_hello="""
-   ____                 _ _      _                     _       _       
-  /___ \_   _  __ _  __| | | ___| |_   /\ /\ _ __   __| | __ _| |_ ___  \n
- //  / / | | |/ _` |/ _` | |/ _ \ __| / / \ \ '_ \ / _` |/ _` | __/ _ \ \n
-/ \_/ /| |_| | (_| | (_| | |  __/ |_  \ \_/ / |_) | (_| | (_| | ||  __/ \n
-\___,_\ \__,_|\__,_|\__,_|_|\___|\__|  \___/| .__/ \__,_|\__,_|\__\___| \n
-                                            |_|                         \n
-                                             by @github.com/philipp-mlr
-"""
-
-echo -e "$script_hello"
-
 # 🚀 Main script execution
 update_config ~/.config/containers/systemd/rootless
 update_config /etc/containers/systemd/rootful
