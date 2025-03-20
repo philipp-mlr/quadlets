@@ -2,7 +2,7 @@ services:
   # AdGuard Home - DNS AdBlocking
   adguardhome:
     container_name: adguardhome
-    image: adguard/adguardhome
+    image: docker.io/adguard/adguardhome
     networks:
       dockeripvlan:
         ipv4_address: 192.168.2.150 # IP address inside defined range
