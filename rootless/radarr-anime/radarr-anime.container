@@ -1,0 +1,46 @@
+[Unit]
+Description=Radarr Anime Movie Management
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=radarr-anime
+Image=lscr.io/linuxserver/radarr:latest
+EnvironmentFile=./radarr-anime.env
+
+Volume=/mnt/cache/appdata/radarr-anime:/config
+Volume=/mnt/disks/media/metadata/radarr-anime:/config/MediaCover
+Volume=/mnt/disks/media/movies:/movies
+Volume=/mnt/disks/downloads:/downloads
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers Auth Bypass
+Label="traefik.http.routers.radarr-anime-rtr-bypass.entrypoints=websecure"
+Label="traefik.http.routers.radarr-anime-rtr-bypass.rule=Host(`radarr-anime.$DOMAINNAME`) && (Header(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
+Label="traefik.http.routers.radarr-anime-rtr-bypass.priority=100"
+## HTTP Routers
+Label="traefik.http.routers.radarr-anime-rtr.entrypoints=websecure"
+Label="traefik.http.routers.radarr-anime-rtr.rule=Host(`radarr-anime.$DOMAINNAME`)"
+Label="traefik.http.routers.radarr-anime-rtr.priority=99"
+## Middlewares
+Label="traefik.http.routers.radarr-anime-rtr-bypass.middlewares=chain-no-auth@file"
+Label="traefik.http.routers.radarr-anime-rtr.middlewares=chain-authelia@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.radarr-anime-rtr.service=radarr-anime-svc"
+Label="traefik.http.routers.radarr-anime-rtr-bypass.service=radarr-anime-svc"
+Label="traefik.http.services.radarr-svc.loadbalancer.server.port=7878"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
