@@ -1,10 +1,10 @@
 [Unit]
-Description=Immich
+Description=Immich Machine Learning
 Wants=network-online.target
 After=network-online.target
 
 [Container]
-ContainerName=immich
+ContainerName=immich-machine-learning
 Image=ghcr.io/immich-app/immich-machine-learning:release-cuda
 
 Volume=/mnt/cache/appdata/immich/machine-learning:/cache
