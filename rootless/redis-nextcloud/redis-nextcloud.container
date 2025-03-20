@@ -1,0 +1,23 @@
+[Unit]
+Description=Database caching for Nextcloud
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=redis-nextcloud
+Image=docker.io/redis:latest
+
+Network=t3_proxy
+
+Volume=/mnt/cache/appdata/redis_nextcloud:/data
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

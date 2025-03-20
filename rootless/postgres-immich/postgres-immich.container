@@ -1,0 +1,26 @@
+[Unit]
+Description=Postgres Immich
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=postgres-immich
+Image=docker.io/postgres:15
+EnvironmentFile=postgres-immich.env
+
+Network=t3_proxy
+
+Volume=/mnt/cache/appdata/postgres_immich:/var/lib/postgresql/data
+
+Secret=postgres_password,target=/run/secrets/postgres_password
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

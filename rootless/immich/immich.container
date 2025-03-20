@@ -1,0 +1,40 @@
+[Unit]
+Description=Immich
+Wants=network-online.target
+After=network-online.target redis-immich.service postgres-immich.service
+
+[Container]
+ContainerName=immich
+Image=ghcr.io/immich-app/immich-server:release
+EnvironmentFile=./immich.env
+
+Volume=/mnt/cache/appdata/immich/server:/home/runner
+Volume=/mnt/disks/media/photos:/usr/src/app/upload
+Volume=/etc/localtime:/etc/localtime:ro
+
+Network=t3_proxy
+
+AddDevice=/dev/dri
+
+Secret=postgres_password,target=/run/secrets/postgres_password
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.immich-rtr.entrypoints=websecure"
+Label="traefik.http.routers.immich-rtr.rule=Host(`photos.akatosh.dev`)"
+## Middlewares
+Label="traefik.http.routers.immich-rtr.middlewares=chain-no-auth@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.immich-rtr.service=immich-svc"
+Label="traefik.http.services.immich-svc.loadbalancer.server.port=2283"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
