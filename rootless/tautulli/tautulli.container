@@ -18,7 +18,7 @@ PublishPort=8181:8181
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.tautulli-rtr.entrypoints=websecure"
-Label="traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.akatosh.dev`)"
+Label="traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.tautulli-rtr.middlewares=chain-authelia@file"
 ## HTTP Servicesnoauth

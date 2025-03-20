@@ -26,7 +26,7 @@ Secret=paperless_user,target=/run/secrets/paperless_user
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.paperless-rtr.entrypoints=websecure"
-Label="traefik.http.routers.paperless-rtr.rule=Host(`dms.akatosh.dev`)"
+Label="traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.paperless-rtr.middlewares=chain-authelia@file"
 ## HTTP Servicesnoauth

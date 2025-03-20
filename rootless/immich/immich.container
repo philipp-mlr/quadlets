@@ -21,7 +21,7 @@ Secret=postgres_password,target=/run/secrets/postgres_password
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.immich-rtr.entrypoints=websecure"
-Label="traefik.http.routers.immich-rtr.rule=Host(`photos.akatosh.dev`)"
+Label="traefik.http.routers.immich-rtr.rule=Host(`photos.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.immich-rtr.middlewares=chain-no-auth@file"
 ## HTTP Servicesnoauth

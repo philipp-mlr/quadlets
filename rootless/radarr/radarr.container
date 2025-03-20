@@ -18,11 +18,11 @@ Network=t3_proxy
 Label="traefik.enable=true"
 ## HTTP Routers Auth Bypass
 Label="traefik.http.routers.radarr-rtr-bypass.entrypoints=websecure"
-Label="traefik.http.routers.radarr-rtr-bypass.rule=Host(`radarr.akatosh.dev`) && (Header(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
+Label="traefik.http.routers.radarr-rtr-bypass.rule=Host(`radarr.$DOMAINNAME`) && (Header(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
 Label="traefik.http.routers.radarr-rtr-bypass.priority=100"
 ## HTTP Routers
 Label="traefik.http.routers.radarr-rtr.entrypoints=websecure"
-Label="traefik.http.routers.radarr-rtr.rule=Host(`radarr.akatosh.dev`)"
+Label="traefik.http.routers.radarr-rtr.rule=Host(`radarr.$DOMAINNAME`)"
 Label="traefik.http.routers.radarr-rtr.priority=99"
 ## Middlewares
 Label="traefik.http.routers.radarr-rtr-bypass.middlewares=chain-no-auth@file"

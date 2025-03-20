@@ -43,10 +43,10 @@ Exec=--global.checkNewVersion=true \
     --accessLog.filters.statusCodes=204-299,400-499,500-599 \
     --entrypoints.websecure.http.tls.options=tls-opts@file \
     --entrypoints.websecure.http.tls.certresolver=dns-cloudflare \
-    --entrypoints.websecure.http.tls.domains[0].main=akatosh.dev \
-    --entrypoints.websecure.http.tls.domains[0].sans=*.akatosh.dev \
-    --entrypoints.websecure.http.tls.domains[1].main=philipp.software \
-    --entrypoints.websecure.http.tls.domains[1].sans=*.philipp.software \
+    --entrypoints.websecure.http.tls.domains[0].main=$DOMAINNAME \
+    --entrypoints.websecure.http.tls.domains[0].sans=*.$DOMAINNAME \
+    --entrypoints.websecure.http.tls.domains[1].main=$PUBLIC_DOMAINNAME \
+    --entrypoints.websecure.http.tls.domains[1].sans=*.$PUBLIC_DOMAINNAME \
     --providers.docker=true \
     --providers.docker.exposedByDefault=false \
     --providers.docker.network=t3_proxy \
@@ -64,19 +64,19 @@ HealthCmd=CMD traefik healthcheck --ping
 Label="traefik.enable=true"
 Label=# HTTP Routers
 Label="traefik.http.routers.traefik-rtr.entrypoints=websecure"
-Label="traefik.http.routers.traefik-rtr.rule=Host(`traefik.akatosh.dev`)"
+Label="traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME`)"
  # Some people had 404s without this
 Label="traefik.http.routers.traefik-rtr.tls=true"
 # Comment out this line after first run of traefik to force the use of wildcard certs
 Label="traefik.http.routers.traefik-rtr.tls.certresolver=dns-cloudflare" 
-Label="traefik.http.routers.traefik-rtr.tls.domains[0].main=akatosh.dev"
-Label="traefik.http.routers.traefik-rtr.tls.domains[0].sans=*.akatosh.dev"
-Label="traefik.http.routers.traefik-rtr.tls.domains[1].main=philipp.software"
-Label="traefik.http.routers.traefik-rtr.tls.domains[1].sans=*.philipp.software"
+Label="traefik.http.routers.traefik-rtr.tls.domains[0].main=$DOMAINNAME"
+Label="traefik.http.routers.traefik-rtr.tls.domains[0].sans=*.$DOMAINNAME"
+Label="traefik.http.routers.traefik-rtr.tls.domains[1].main=$PUBLIC_DOMAINNAME"
+Label="traefik.http.routers.traefik-rtr.tls.domains[1].sans=*.$PUBLIC_DOMAINNAME"
 ## Services - API
 Label="traefik.http.routers.traefik-rtr.service=api@internal"
 ## Healthcheck/ping
-Label="traefik.http.routers.ping.rule=Host(`traefik.akatosh.dev`) && Path(`/ping`)"
+Label="traefik.http.routers.ping.rule=Host(`traefik.$DOMAINNAME`) && Path(`/ping`)"
 Label="traefik.http.routers.ping.tls=true"
 Label="traefik.http.routers.ping.service=ping@internal"
 ## Middlewares

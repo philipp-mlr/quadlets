@@ -20,7 +20,7 @@ Secret=authelia_session_redis_password,target=/run/secrets/authelia_session_redi
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.authelia-rtr.entrypoints=websecure"
-Label="traefik.http.routers.authelia-rtr.rule=Host(`auth.akatosh.dev`)"
+Label="traefik.http.routers.authelia-rtr.rule=Host(`auth.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.authelia-rtr.middlewares=chain-no-auth@file"
 ## HTTP Servicesnoauth

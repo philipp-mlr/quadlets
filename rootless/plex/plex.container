@@ -37,7 +37,7 @@ Secret=plex_claim,target=/run/secrets/plex_claim
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.plex-rtr.entrypoints=websecure"
-Label="traefik.http.routers.plex-rtr.rule=Host(`plex.akatosh.dev`)"
+Label="traefik.http.routers.plex-rtr.rule=Host(`plex.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.plex-rtr.middlewares=chain-no-auth-compress@file"
 ## HTTP Servicesnoauth
