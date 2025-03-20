@@ -57,6 +57,26 @@ update_rootful() {
   fi
 
   echo "Rootful configuration updated."
+
+  # Function to start services that aren't running
+  start_services() {
+    find /etc/containers/systemd/rootful/rootful/ -name "*.container" -print0 | while IFS= read -r -d $'\0' service_file; do
+      service_name=$(basename "$service_file" .container)
+      status=$(sudo systemctl is-active "$service_name")
+
+      if [ "$status" != "active" ]; then
+        echo "  Starting service: $service_name"
+        sudo systemctl start "$service_name"
+        if [ $? -eq 0 ]; then
+          echo "  Service $service_name started successfully."
+        else
+          echo "  Failed to start service $service_name."
+        fi
+      fi
+    done
+  }
+
+  start_services # Call the function to start services
 }
 
 # Main script execution
