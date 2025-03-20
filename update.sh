@@ -2,27 +2,28 @@
 
 # 🚀 Function to start services in a given directory
 start_services() {
-  local service_dir="$1" # Get the directory from the function's input
+  local service_dir="$1"
 
   find "$service_dir" -name "*.container" -print0 | while IFS= read -r -d $'\0' service_file; do
-    service_name=$(basename "$service_file" .container)
+    local service_name=$(basename "$service_file" .container)
+    local status
     
-    if [ "$service_dir" == "/etc/containers/systemd/rootful" ]; then
+    if [[ "$service_dir" == "/etc/containers/systemd/rootful" ]]; then
       status=$(sudo systemctl is-active "$service_name")
     else
       status=$(systemctl --user is-active "$service_name")
     fi
 
-    if [ "$status" != "active" ]; then
+    if [[ "$status" != "active" ]]; then
       echo -e "\n  ▶️ Starting service: $service_name"
       
-      if [ "$service_dir" == "/etc/containers/systemd/rootful" ]; then
+      if [[ "$service_dir" == "/etc/containers/systemd/rootful" ]]; then
         sudo systemctl start "$service_name"
       else
         systemctl --user start "$service_name"
       fi
 
-      if [ $? -eq 0 ]; then
+      if [[ $? -eq 0 ]]; then
         echo -e "  ✅ Service $service_name started successfully.\n"
       else
         echo -e "  ❌ Failed to start service $service_name.\n"
@@ -31,24 +32,41 @@ start_services() {
   done
 }
 
-# 🛠️ Function to update rootless configuration
-update_rootless() {
-  echo -e "\n🔄 Updating systemd rootless configuration..."
+# 🛠️ Function to update systemd configuration
+update_config() {
+  local config_dir="$1"
+  local source_dir="./$(basename "$config_dir")"
+  local sudo_prefix=""
+  local systemctl_reload="systemctl --user daemon-reload"
+  local is_rootful=false
 
-  echo -e "\n  🗑️ Removing old rootless configuration..."
-  rm -rf ~/.config/containers/systemd/rootless || true
-
-  echo -e "\n  📂 Copying new rootless configuration..."
-  cp -r ./rootless/. ~/.config/containers/systemd/rootless/
-
-  if [ $? -eq 0 ]; then
-    echo -e "  ✅ Rootless configuration copied successfully.\n"
-  else
-    echo -e "  ❌ Failed to copy rootless configuration!\n"
+  if [[ "$config_dir" == "/etc/containers/systemd/rootful" ]]; then
+    sudo_prefix="sudo"
+    systemctl_reload="sudo systemctl daemon-reload"
+    is_rootful=true
   fi
 
-  # Check for empty environment variables in the rootless container files
-  find ~/.config/containers/systemd/rootless -name "*.env" -exec sh -c '
+  echo -e "\n🔄 Updating systemd $(basename "$config_dir") configuration..."
+
+  echo -e "\n  🗑️ Removing old configuration..."
+  ${sudo_prefix} rm -rf "$config_dir" || true
+
+  if [[ "$is_rootful" == true ]]; then
+      echo -e "\n  📂 Creating new rootful configuration directory..."
+      ${sudo_prefix} mkdir -p "$config_dir"
+  fi
+
+  echo -e "\n  📂 Copying new configuration..."
+  ${sudo_prefix} cp -r "$source_dir/." "$config_dir/"
+
+  if [[ $? -eq 0 ]]; then
+    echo -e "  ✅ Configuration copied successfully.\n"
+  else
+    echo -e "  ❌ Failed to copy configuration!\n"
+  fi
+
+  # Check for empty environment variables in the container files
+  ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
     for env_file in "$@"; do
       while IFS= read -r line; do
         if [[ "$line" =~ ^[^#]*=([[:space:]]*)$ ]]; then
@@ -59,90 +77,33 @@ update_rootless() {
     done
   ' sh {} +
 
-  if [ $? -ne 0 ]; then
+  if [[ $? -ne 0 ]]; then
     echo -e "  ❌ Exiting due to empty environment variables.\n"
     exit 1
   fi
 
-  # Replace environment variables in the rootless container files
-  find ~/.config/containers/systemd/rootless -name "*.env" -exec sh -c '
-    env $(grep -v "^\s*#" {} | grep -v "^\s*$" | xargs) envsubst < ${1%.env}.container > ${1%.env}.container.new && mv ${1%.env}.container.new ${1%.env}.container
-  ' sh {} \;
-
-  echo -e "\n  🔄 Reloading user systemd..."
-  systemctl --user daemon-reload
-
-  if [ $? -eq 0 ]; then
-    echo -e "  ✅ User systemd reloaded successfully.\n"
-  else
-    echo -e "  ❌ Failed to reload user systemd!\n"
-  fi
-
-  echo -e "✅ Rootless configuration updated.\n"
-
-  # Start services in the rootless directory
-  start_services ~/.config/containers/systemd/rootless
-}
-
-# 🔧 Function to update rootful configuration
-update_rootful() {
-  echo -e "\n🔄 Updating systemd rootful configuration..."
-
-  echo -e "\n  🗑️ Removing old rootful configuration..."
-  sudo rm -rf /etc/containers/systemd/rootful || true
-
-  echo -e "\n  📂 Creating new rootful configuration directory..."
-  sudo mkdir -p /etc/containers/systemd/rootful
-
-  echo -e "\n  📂 Copying new rootful configuration..."
-  sudo cp -r ./rootful/. /etc/containers/systemd/rootful/
-
-  if [ $? -eq 0 ]; then
-    echo -e "  ✅ Rootful configuration copied successfully.\n"
-  else
-    echo -e "  ❌ Failed to copy rootful configuration!\n"
-  fi
-
-  # Check for empty environment variables in the rootful container files
-  sudo find /etc/containers/systemd/rootful -name "*.env" -exec sh -c '
-    for env_file in "$@"; do
-      while IFS= read -r line; do
-        if [[ "$line" =~ ^[^#]*=([[:space:]]*)$ ]]; then
-          echo "❌ Error: Empty environment variable detected in $env_file: $line"
-          exit 1
-        fi
-      done < "$env_file"
-    done
-  ' sh {} +
-
-  if [ $? -ne 0 ]; then
-    echo -e "  ❌ Exiting due to empty environment variables.\n"
-    exit 1
-  fi
-
-  # Replace environment variables in the rootful container files
-  sudo find /etc/containers/systemd/rootful -name "*.env" -exec sh -c '
+  # Replace environment variables in the container files
+  ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
     env $(grep -v "^\s*#" {} | grep -v "^\s*$" | xargs) envsubst < ${1%.env}.container > ${1%.env}.container.new && mv ${1%.env}.container.new ${1%.env}.container
   ' sh {} \;
 
   echo -e "\n  🔄 Reloading systemd..."
-  sudo systemctl daemon-reload
+  $systemctl_reload
 
-  if [ $? -eq 0 ]; then
+  if [[ $? -eq 0 ]]; then
     echo -e "  ✅ Systemd reloaded successfully.\n"
   else
     echo -e "  ❌ Failed to reload systemd!\n"
   fi
 
-  echo -e "✅ Rootful configuration updated.\n"
+  echo -e "✅ $(basename "$config_dir") configuration updated.\n"
 
-  # Start services in the rootful directory
-  start_services /etc/containers/systemd/rootful
+  # Start services in the directory
+  start_services "$config_dir"
 }
 
 # 🚀 Main script execution
-update_rootless
-
-update_rootful
+update_config ~/.config/containers/systemd/rootless
+update_config /etc/containers/systemd/rootful
 
 echo -e "\n🎉 All systemd configurations updated.\n"
