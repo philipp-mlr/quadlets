@@ -49,7 +49,7 @@ update_rootless() {
 
   # Replace environment variables in the rootless container files
   find ~/.config/containers/systemd/rootless -name "*.env" -exec sh -c '
-    env $(cat {}) envsubst < ${1%.env}.container > ${1%.env}.container.new && mv ${1%.env}.container.new ${1%.env}.container
+    env $(grep -v "^\s*#" {} | grep -v "^\s*$" | xargs) envsubst < ${1%.env}.container > ${1%.env}.container.new && mv ${1%.env}.container.new ${1%.env}.container
   ' sh {} \;
 
   echo -e "\n  🔄 Reloading user systemd..."
@@ -88,7 +88,7 @@ update_rootful() {
 
   # Replace environment variables in the rootful container files
   sudo find /etc/containers/systemd/rootful -name "*.env" -exec sh -c '
-    env $(cat {}) envsubst < ${1%.env}.container > ${1%.env}.container.new && mv ${1%.env}.container.new ${1%.env}.container
+    env $(grep -v "^\s*#" {} | grep -v "^\s*$" | xargs) envsubst < ${1%.env}.container > ${1%.env}.container.new && mv ${1%.env}.container.new ${1%.env}.container
   ' sh {} \;
 
   echo -e "\n  🔄 Reloading systemd..."
