@@ -93,7 +93,7 @@ update_rootful() {
   echo -e "✅ Rootful configuration updated.\n"
 
   # Start services in the rootful directory
-  start_services /etc/containers/systemd/rootful/
+  start_services /etc/containers/systemd/rootful
 }
 
 # 🚀 Main script execution
