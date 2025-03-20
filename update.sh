@@ -47,6 +47,23 @@ update_rootless() {
     echo -e "  ❌ Failed to copy rootless configuration!\n"
   fi
 
+  # Check for empty environment variables in the rootless container files
+  find ~/.config/containers/systemd/rootless -name "*.env" -exec sh -c '
+    for env_file in "$@"; do
+      while IFS= read -r line; do
+        if [[ "$line" =~ ^[^#]*=([[:space:]]*)$ ]]; then
+          echo "❌ Error: Empty environment variable detected in $env_file: $line"
+          exit 1
+        fi
+      done < "$env_file"
+    done
+  ' sh {} +
+
+  if [ $? -ne 0 ]; then
+    echo -e "  ❌ Exiting due to empty environment variables.\n"
+    exit 1
+  fi
+
   # Replace environment variables in the rootless container files
   find ~/.config/containers/systemd/rootless -name "*.env" -exec sh -c '
     env $(grep -v "^\s*#" {} | grep -v "^\s*$" | xargs) envsubst < ${1%.env}.container > ${1%.env}.container.new && mv ${1%.env}.container.new ${1%.env}.container
@@ -84,6 +101,23 @@ update_rootful() {
     echo -e "  ✅ Rootful configuration copied successfully.\n"
   else
     echo -e "  ❌ Failed to copy rootful configuration!\n"
+  fi
+
+  # Check for empty environment variables in the rootful container files
+  sudo find /etc/containers/systemd/rootful -name "*.env" -exec sh -c '
+    for env_file in "$@"; do
+      while IFS= read -r line; do
+        if [[ "$line" =~ ^[^#]*=([[:space:]]*)$ ]]; then
+          echo "❌ Error: Empty environment variable detected in $env_file: $line"
+          exit 1
+        fi
+      done < "$env_file"
+    done
+  ' sh {} +
+
+  if [ $? -ne 0 ]; then
+    echo -e "  ❌ Exiting due to empty environment variables.\n"
+    exit 1
   fi
 
   # Replace environment variables in the rootful container files
