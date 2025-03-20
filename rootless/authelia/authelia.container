@@ -31,6 +31,8 @@ NoNewPrivileges=true
 
 AutoUpdate=registry
 
+Timezone=local
+
 [Service]
 Restart=always
 TimeoutStartSec=900
