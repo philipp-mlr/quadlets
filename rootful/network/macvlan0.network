@@ -2,5 +2,7 @@
 [Network]
 DisableDNS=true
 Driver=macvlan
-IPAMDriver=dhcp
+Gateway=192.168.2.1
+IPAMDriver=host-local
 PodmanArgs=--interface-name enp6s0
+Subnet=192.168.2.0/24
