@@ -39,7 +39,7 @@ update_rootless() {
   rm -rf ~/.config/containers/systemd/rootless || true
 
   echo -e "\n  📂 Copying new rootless configuration..."
-  cp -r ./rootless ~/.config/containers/systemd/rootless
+  cp -r ./rootless/. ~/.config/containers/systemd/rootless/
 
   if [ $? -eq 0 ]; then
     echo -e "  ✅ Rootless configuration copied successfully.\n"
@@ -73,7 +73,7 @@ update_rootful() {
   sudo mkdir -p /etc/containers/systemd/rootful
 
   echo -e "\n  📂 Copying new rootful configuration..."
-  sudo cp -r ./rootful /etc/containers/systemd/rootful
+  sudo cp -r ./rootful/. /etc/containers/systemd/rootful/
 
   if [ $? -eq 0 ]; then
     echo -e "  ✅ Rootful configuration copied successfully.\n"
