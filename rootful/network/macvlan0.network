@@ -1,0 +1,6 @@
+# macvlan0.network
+[Network]
+DisableDNS=true
+Driver=macvlan
+IPAMDriver=dhcp
+PodmanArgs=--interface-name enp6s0
