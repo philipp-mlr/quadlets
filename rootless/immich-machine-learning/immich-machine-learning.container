@@ -11,7 +11,7 @@ Volume=/mnt/cache/appdata/immich/machine-learning:/cache
 
 Network=t3_proxy
 
-AddDevice=nvidia.com/gpu=1
+AddDevice=nvidia.com/gpu=all
 
 NoNewPrivileges=true
 
