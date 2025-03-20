@@ -1,0 +1,24 @@
+[Unit]
+Description=Network UPS Tools UPS Daemon
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=nut-upsd
+Image=docker.io/instantlinux/nut-upsd
+
+Network=podman
+
+PublishPort=3493:3493
+
+# Give container access to USB devices
+AddDevice=/dev/bus/usb 
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,35 @@
+[Unit]
+Description=Scrutiny SMART monitoring
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=scrutiny
+Image=ghcr.io/analogj/scrutiny:master-omnibus
+
+Network=podman
+
+PublishPort=8088:8080
+
+Volume=/mnt/cache/appdata/scrutiny:/opt/scrutiny/config
+Volume=/run/udev:/run/udev:ro
+
+AddCapability=SYS_RAWIO SYS_ADMIN
+
+AddDevice=/dev/sda
+AddDevice=/dev/sdb
+AddDevice=/dev/sdc
+AddDevice=/dev/sdd
+AddDevice=/dev/sde
+AddDevice=/dev/sdf
+AddDevice=/dev/nvme0
+AddDevice=/dev/nvme1
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
