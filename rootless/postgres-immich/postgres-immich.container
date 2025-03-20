@@ -22,7 +22,7 @@ Exec=postgres \
       -c shared_buffers=512MB \
       -c wal_compression=on \
 
-HealthCmd=/bin/sh -c '
+HealthCmd=/bin/sh -c '\
   pg_isready -d "$POSTGRES_DB" -U "$POSTGRES_USER" || exit 1; \
   Chksum=$(psql -d "$POSTGRES_DB" -U "$POSTGRES_USER" -tA -c "SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database"); \
   echo "checksum failure count is $Chksum"; \
