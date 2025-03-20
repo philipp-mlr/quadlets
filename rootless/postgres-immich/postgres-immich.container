@@ -20,7 +20,7 @@ Exec=postgres \
       -c logging_collector=on \
       -c max_wal_size=2GB \
       -c shared_buffers=512MB \
-      -c wal_compression=on \
+      -c wal_compression=on
 
 # HealthCmd=/bin/sh -c '\
 #   pg_isready -d "$POSTGRES_DB" -U "$POSTGRES_USER" || exit 1; \
