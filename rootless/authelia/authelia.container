@@ -1,0 +1,39 @@
+[Unit]
+Description=Authelia
+Wants=network-online.target
+After=network-online.target redis-authelia.service
+
+[Container]
+ContainerName=authelia
+Image=docker.io/authelia/authelia:latest
+EnvironmentFile=./authelia.env
+
+Volume=/mnt/cache/appdata/authelia:/config
+
+Network=t3_proxy
+
+Secret=authelia_jwt_secret,target=/run/secrets/authelia_jwt_secret
+Secret=authelia_storage_encryption_key,target=/run/secrets/authelia_storage_encryption_key
+Secret=authelia_session_secret,target=/run/secrets/authelia_session_secret
+Secret=authelia_session_redis_password,target=/run/secrets/authelia_session_redis_password
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.authelia-rtr.entrypoints=websecure"
+Label="traefik.http.routers.authelia-rtr.rule=Host(`auth.akatosh.dev`)"
+## Middlewares
+Label="traefik.http.routers.authelia-rtr.middlewares=chain-no-auth@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.authelia-rtr.service=authelia-svc"
+Label="traefik.http.services.authelia-svc.loadbalancer.server.port=9091"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
