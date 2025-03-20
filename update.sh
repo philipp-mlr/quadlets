@@ -35,6 +35,9 @@ update_rootful() {
   echo "🧹 Cleaning up old rootful configuration..."
   sudo rm -rf /etc/containers/systemd/rootful || true
 
+  echo "🧹 Creating new rootful configuration directory..."
+  sudo mkdir -p /etc/containers/systemd/rootful
+
   echo "✨ Copying new rootful configuration..."
   sudo cp -r ./rootful /etc/containers/systemd/rootful
 
