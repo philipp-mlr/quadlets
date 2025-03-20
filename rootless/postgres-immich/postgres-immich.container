@@ -23,11 +23,10 @@ Exec=postgres \
       -c wal_compression=on \
 
 HealthCmd=/bin/sh -c '
-  pg_isready -d "$POSTGRES_DB" -U "$POSTGRES_USER" || exit 1;
-  Chksum=$(psql -d "$POSTGRES_DB" -U "$POSTGRES_USER" -tA -c "SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database");
-  echo "checksum failure count is $Chksum";
-  [ "$Chksum" = "0" ] || exit 1
-'
+  pg_isready -d "$POSTGRES_DB" -U "$POSTGRES_USER" || exit 1; \
+  Chksum=$(psql -d "$POSTGRES_DB" -U "$POSTGRES_USER" -tA -c "SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database"); \
+  echo "checksum failure count is $Chksum"; \
+  [ "$Chksum" = "0" ] || exit 1 '
 HealthInterval=5m
 HealthStartPeriod=5m
 HealthStartupInterval=30s
