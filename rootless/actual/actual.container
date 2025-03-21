@@ -8,7 +8,7 @@ ContainerName=actual
 Image=ghcr.io/actualbudget/actual:latest
 EnvironmentFile=actual.env
 
-Volume=/mnt/cache/appdata/actual:/app
+Volume=/mnt/cache/appdata/actual:/data
 
 Network=t3_proxy
 
