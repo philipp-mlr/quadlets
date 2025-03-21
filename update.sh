@@ -69,7 +69,7 @@ update_config() {
   ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
     for env_file in "$@"; do
       while IFS= read -r line; do
-        if [[ "$line" =~ ^[^#]*=([[:space:]]*)$ ]]; then
+        if [[ "$line" =~ ^[^#]*=[[:space:]]*$ ]]; then
           echo "❌ Error: Empty environment variable detected in $env_file: $line"
           exit 1
         fi
@@ -85,9 +85,11 @@ update_config() {
   # Replace environment variables in the container files
   ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
     for env_file in "$@"; do
-      set -o allexport
-      source "$env_file"
-      set +o allexport
+      while IFS= read -r line; do
+        if [[ "$line" =~ ^([^#=]+)=(.*)$ ]]; then
+          export "${BASH_REMATCH[1]}=${BASH_REMATCH[2]}"
+        fi
+      done < "$env_file"
       envsubst < ${env_file%.env}.container > ${env_file%.env}.container.new && mv ${env_file%.env}.container.new ${env_file%.env}.container
     done
   ' sh {} +
