@@ -1,0 +1,36 @@
+[Unit]
+Description=Onlyoffice 
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=onlyoffice
+Image=docker.io/onlyoffice/documentserver:latest
+EnvironmentFile=onlyoffice.env
+
+Volume=/mnt/cache/appdata/onlyoffice/logs:/var/log/onlyoffice
+Volume=/mnt/cache/appdata/onlyoffice/cache:/var/lib/onlyoffice
+Volume=/mnt/cache/appdata/onlyoffice/db:/var/lib/postgresql
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.onlyoffice-rtr.entrypoints=websecure"
+Label="traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
+Label="traefik.http.services.onlyoffice-svc.loadbalancer.server.port=80"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
