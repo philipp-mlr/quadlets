@@ -1,10 +1,10 @@
 [Unit]
-Description=Actual Budget
+Description=Actual Budget AI
 Wants=network-online.target
 After=network-online.target actual.service
 
 [Container]
-ContainerName=actual
+ContainerName=actual-ai
 Image=docker.io/sakowicz/actual-ai:latest
 EnvironmentFile=actual-ai.env
 
