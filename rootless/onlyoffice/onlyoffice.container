@@ -17,7 +17,7 @@ Network=t3_proxy
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.onlyoffice-rtr.entrypoints=websecure"
-Label="traefik.http.routers.onlyoffice-rtr.rule=Host(`cloud.$DOMAINNAME`) && PathPrefix(`/documentserver`)"
+Label="traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
 ## HTTP Servicesnoauth
