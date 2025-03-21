@@ -6,6 +6,7 @@ After=network-online.target
 [Container]
 ContainerName=actual
 Image=ghcr.io/actualbudget/actual:latest
+EnvironmentFile=actual.env
 
 Volume=/mnt/cache/appdata/actual:/app
 
@@ -16,7 +17,7 @@ Label="traefik.enable=true"
 Label="traefik.http.routers.actual-rtr.entrypoints=websecure"
 Label="traefik.http.routers.actual-rtr.rule=Host(`budget.$DOMAINNAME`)"
 ## Middlewares
-Label="traefik.http.routers.actual-rtr.middlewares=chain-actual@file"
+Label="traefik.http.routers.actual-rtr.middlewares=chain-authelia@file"
 ## HTTP Servicesnoauth
 Label="traefik.http.routers.actual-rtr.service=actual-svc"
 Label="traefik.http.services.actual-svc.loadbalancer.server.port=5006"
