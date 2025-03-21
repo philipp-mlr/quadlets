@@ -84,8 +84,13 @@ update_config() {
 
   # Replace environment variables in the container files
   ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
-    env $(grep -v "^\s*#" {} | grep -v "^\s*$" | xargs) envsubst < ${1%.env}.container > ${1%.env}.container.new && mv ${1%.env}.container.new ${1%.env}.container
-  ' sh {} \;
+    for env_file in "$@"; do
+      set -o allexport
+      source "$env_file"
+      set +o allexport
+      envsubst < ${env_file%.env}.container > ${env_file%.env}.container.new && mv ${env_file%.env}.container.new ${env_file%.env}.container
+    done
+  ' sh {} +
 
   echo -e "\n  🔄 Reloading systemd..."
   $systemctl_reload
