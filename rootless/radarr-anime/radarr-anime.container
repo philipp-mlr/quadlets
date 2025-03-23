@@ -30,7 +30,7 @@ Label="traefik.http.routers.radarr-anime-rtr.middlewares=chain-authelia@file"
 ## HTTP Servicesnoauth
 Label="traefik.http.routers.radarr-anime-rtr.service=radarr-anime-svc"
 Label="traefik.http.routers.radarr-anime-rtr-bypass.service=radarr-anime-svc"
-Label="traefik.http.services.radarr-svc.loadbalancer.server.port=7878"
+Label="traefik.http.services.radarr-anime-svc.loadbalancer.server.port=7878"
 
 NoNewPrivileges=true
 
