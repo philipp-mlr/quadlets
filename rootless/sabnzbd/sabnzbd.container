@@ -1,7 +1,7 @@
 [Unit]
 Description=SABnzbd
 Wants=network-online.target
-After=network-online.target 
+After=network-online.target gluetun.service
 
 [Container]
 ContainerName=sabnzbd

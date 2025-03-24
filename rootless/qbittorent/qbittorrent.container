@@ -1,0 +1,30 @@
+[Unit]
+Description=qBittorrent
+Wants=network-online.target
+After=network-online.target gluetun.service
+
+[Container]
+ContainerName=qbittorrent
+Image=lscr.io/linuxserver/qbittorrent:latest
+EnvironmentFile=qbittorrent.env
+
+Network=container:gluetun
+
+Volume=/mnt/cache/appdata/qbittorrent:/config
+Volume=/mnt/disks/downloads/torrents/:/downloads/torrents
+
+HealthCmd=curl -sf https://example.com  || exit 1
+HealthInterval=1m
+HealthTimeout=10s
+HealthRetries=1
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
