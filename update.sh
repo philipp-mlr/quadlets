@@ -69,7 +69,7 @@ update_config() {
   ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
     for env_file in "$@"; do
       while IFS= read -r line; do
-        if [[ "$line" =~ ^[^#]*=[[:space:]]*$ ]]; then
+        if [[ "$line" =~ ^([^#=]+)=[[:space:]]*$ ]]; then
           echo "❌ Error: Empty environment variable detected in $env_file: $line"
           exit 1
         fi
