@@ -23,24 +23,22 @@ Label="traefik.http.routers.gluetun-rtr.service=gluetun-svc"
 Label="traefik.http.services.gluetun-svc.loadbalancer.server.port=8000"
 #### qBittorrent
 ## HTTP Routers
-Label="traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=websecure"
-Label="traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)"
+Label="traefik.http.routers.qbitorrent-rtr.entrypoints=websecure"
+Label="traefik.http.routers.qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)"
 ## Middlewares
-Label="traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-authelia@file"
+Label="traefik.http.routers.qbitorrent-rtr.middlewares=chain-authelia@file"
 ## HTTP Services
-Label="traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc"
-Label="traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8095"
+Label="traefik.http.routers.qbitorrent-rtr.service=qbitorrent-svc"
+Label="traefik.http.services.qbitorrent-svc.loadbalancer.server.port=8080"
 #### SABnzbd
 ## HTTP Routers Auth
 Label="traefik.http.routers.sabnzbd-rtr.entrypoints=websecure"
 Label="traefik.http.routers.sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)"
 Label="traefik.http.routers.sabnzbd-rtr.priority=99"
 ## Middlewares
-Label="traefik.http.routers.sabnzbd-rtr-bypass.middlewares=chain-authelia@file"
 Label="traefik.http.routers.sabnzbd-rtr.middlewares=chain-authelia@file"
 ## HTTP Services
 Label="traefik.http.routers.sabnzbd-rtr.service=sabnzbd-svc"
-Label="traefik.http.routers.sabnzbd-rtr-bypass.service=sabnzbd-svc"
 Label="traefik.http.services.sabnzbd-svc.loadbalancer.server.port=8085"
 
 NoNewPrivileges=true
