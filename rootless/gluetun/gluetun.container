@@ -29,7 +29,7 @@ Label="traefik.http.routers.qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)"
 Label="traefik.http.routers.qbitorrent-rtr.middlewares=chain-authelia@file"
 ## HTTP Services
 Label="traefik.http.routers.qbitorrent-rtr.service=qbitorrent-svc"
-Label="traefik.http.services.qbitorrent-svc.loadbalancer.server.port=8080"
+Label="traefik.http.services.qbitorrent-svc.loadbalancer.server.port=8095"
 #### SABnzbd
 ## HTTP Routers Auth
 Label="traefik.http.routers.sabnzbd-rtr.entrypoints=websecure"
