@@ -8,7 +8,7 @@ ContainerName=sabnzbd
 Image=docker.io/linuxserver/sabnzbd:latest
 EnvironmentFile=sabnzbd.env
 
-NetworkAlias=gluetun
+Network=container:gluetun
 
 Volume=/mnt/cache/appdata/sabnzbd:/config
 Volume=/mnt/disks/downloads/usenet/:/downloads/usenet
