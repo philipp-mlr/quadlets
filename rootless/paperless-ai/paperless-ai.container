@@ -1,0 +1,36 @@
+[Unit]
+Description=Paperless AI
+Wants=network-online.target
+After=network-online.target paperless.service
+
+[Container]
+ContainerName=paperless-ai
+Image=docker.io/clusterzx/paperless-ai
+EnvironmentFile=paperless-ai.env
+
+Network=t3_proxy
+
+Volume=/mnt/cache/appdata/paperless_ai:/app/data
+
+NoNewPrivileges=true
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.paperless-ai-rtr.entrypoints=websecure"
+Label="traefik.http.routers.paperless-ai-rtr.rule=Host(`ai-dms.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.paperless-ai-rtr.middlewares=chain-authelia@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.paperless-ai-rtr.service=paperless-ai-svc"
+Label="traefik.http.services.paperless-ai-svc.loadbalancer.server.port=3000"
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
