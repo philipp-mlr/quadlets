@@ -1,0 +1,37 @@
+[Unit]
+Description=Bazarr Subtitle Manager
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=bazarr
+Image=lscr.io/linuxserver/bazarr:latest
+EnvironmentFile=bazarr.env
+
+Network=t3_proxy
+
+Volume=/mnt/cache/appdata/bazarr:/config
+Volume=/mnt/disks/media:/data
+
+NoNewPrivileges=true
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.bazarr-rtr.entrypoints=websecure"
+Label="traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.bazarr-rtr.middlewares=chain-authelia@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.bazarr-rtr.service=bazarr-svc"
+Label="traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
