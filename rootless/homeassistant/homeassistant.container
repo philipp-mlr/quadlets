@@ -10,12 +10,9 @@ EnvironmentFile=./homeassistant.env
 
 Volume=/mnt/cache/appdata/homeassistant:/config
 
-Network=t3_proxy
+Network=host
 
 AddCapability=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_ADMIN
-
-# Sonos
-ExposeHostPort=1443
 
 Label="traefik.enable=true"
 ## HTTP Routers
