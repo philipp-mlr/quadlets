@@ -25,7 +25,11 @@ AddDevice=/dev/sdf
 AddDevice=/dev/nvme0
 AddDevice=/dev/nvme1
 
+NoNewPrivileges=true
+
 AutoUpdate=registry
+
+Timezone=local
 
 [Service]
 Restart=on-failure
