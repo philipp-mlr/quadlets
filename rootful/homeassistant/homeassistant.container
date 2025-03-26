@@ -10,9 +10,7 @@ EnvironmentFile=./homeassistant.env
 
 Volume=/mnt/cache/appdata/homeassistant:/config
 
-Network=host
-
-AddCapability=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_ADMIN
+AddCapability=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_ADMIN CAP_NET_RAW
 
 NoNewPrivileges=true
 
