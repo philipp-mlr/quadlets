@@ -30,7 +30,7 @@ Label="traefik.http.routers.sonarr-anime-rtr.middlewares=chain-authelia@file"
 ## HTTP Servicesnoauth
 Label="traefik.http.routers.sonarr-anime-rtr.service=sonarr-anime-svc"
 Label="traefik.http.routers.sonarr-anime-rtr-bypass.service=sonarr-anime-svc"
-Label="traefik.http.services.sonarr-anime-svc.loadbalancer.server.port=7878"
+Label="traefik.http.services.sonarr-anime-svc.loadbalancer.server.port=8989"
 
 NoNewPrivileges=true
 
