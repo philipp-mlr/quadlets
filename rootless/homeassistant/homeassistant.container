@@ -1,0 +1,36 @@
+[Unit]
+Description=homeassistant
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=homeassistant
+Image=docker.io/homeassistant/home-assistant:latest
+EnvironmentFile=./homeassistant.env
+
+Volume=/mnt/cache/appdata/homeassistant:/config
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.homeassistant-rtr.entrypoints=websecure"
+Label="traefik.http.routers.homeassistant-rtr.rule=Host(`homeassistant.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.homeassistant-rtr.middlewares=chain-authelia@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.homeassistant-rtr.service=homeassistant-svc"
+Label="traefik.http.services.homeassistant-svc.loadbalancer.server.port=8123"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
