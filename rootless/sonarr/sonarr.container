@@ -1,0 +1,46 @@
+[Unit]
+Description=Sonarr Tv Show Manager
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=sonarr
+Image=lscr.io/linuxserver/sonarr:latest
+EnvironmentFile=./sonarr.env
+
+Volume=/mnt/cache/appdata/sonarr:/config
+Volume=/mnt/disks/media/metadata/sonarr:/config/MediaCover
+Volume=/mnt/disks/media/tv:/tv
+Volume=/mnt/disks/downloads:/downloads
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers Auth Bypass
+Label="traefik.http.routers.sonarr-rtr-bypass.entrypoints=websecure"
+Label="traefik.http.routers.sonarr-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME`) && (Header(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$sonarr_API_KEY`))"
+Label="traefik.http.routers.sonarr-rtr-bypass.priority=100"
+## HTTP Routers
+Label="traefik.http.routers.sonarr-rtr.entrypoints=websecure"
+Label="traefik.http.routers.sonarr-rtr.rule=Host(`sonarr.$DOMAINNAME`)"
+Label="traefik.http.routers.sonarr-rtr.priority=99"
+## Middlewares
+Label="traefik.http.routers.sonarr-rtr-bypass.middlewares=chain-no-auth@file"
+Label="traefik.http.routers.sonarr-rtr.middlewares=chain-authelia@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.sonarr-rtr.service=sonarr-svc"
+Label="traefik.http.routers.sonarr-rtr-bypass.service=sonarr-svc"
+Label="traefik.http.services.sonarr-svc.loadbalancer.server.port=7878"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
