@@ -6,7 +6,7 @@ After=network-online.target
 [Container]
 ContainerName=ollama
 Image=docker.io/ollama/ollama:latest
-EnvironmentFile=actual-ai.env
+EnvironmentFile=ollama.env
 
 Network=t3_proxy
 
