@@ -1,0 +1,37 @@
+[Unit]
+Description=portainer
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=portainer
+Image=docker.io/portainer/portainer-ee:latest
+EnvironmentFile=portainer.env
+
+Volume=/mnt/cache/appdata/portainer/data:/data
+Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.portainer-rtr.entrypoints=websecure"
+Label="traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.portainer-rtr.middlewares=chain-authelia@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.portainer-rtr.service=portainer-svc"
+Label="traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
