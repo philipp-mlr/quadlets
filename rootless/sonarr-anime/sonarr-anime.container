@@ -5,7 +5,7 @@ After=network-online.target
 
 [Container]
 ContainerName=sonarr-anime
-Image=lscr.io/linuxserver/sonarr-anime:latest
+Image=lscr.io/linuxserver/sonarr:latest
 EnvironmentFile=./sonarr-anime.env
 
 Volume=/mnt/cache/appdata/sonarr-anime:/config
