@@ -13,8 +13,6 @@ Volume=/mnt/cache/appdata/plexms/Library/Application Support/Plex Media Server/L
 
 Network=t3_proxy
 
-PublishPort=8181:8181
-
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.tautulli-rtr.entrypoints=websecure"
