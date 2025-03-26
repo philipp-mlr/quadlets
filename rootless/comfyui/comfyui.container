@@ -1,0 +1,38 @@
+[Unit]
+Description=comfyui
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=comfyui
+Image=docker.io/yanwk/comfyui-boot:latest
+EnvironmentFile=comfyui.env
+
+Volume=/mnt/cache/appdata/comfyui:/home/runner
+
+Network=t3_proxy
+
+AddDevice=nvidia.com/gpu=all
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.comfyui-rtr.entrypoints=websecure"
+Label="traefik.http.routers.comfyui-rtr.rule=Host(`gen.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.comfyui-rtr.middlewares=chain-authelia@file"
+## HTTP Servicesnoauth
+Label="traefik.http.routers.comfyui-rtr.service=comfyui-svc"
+Label="traefik.http.services.comfyui-svc.loadbalancer.server.port=8188"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
