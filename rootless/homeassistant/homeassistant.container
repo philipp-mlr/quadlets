@@ -12,6 +12,8 @@ Volume=/mnt/cache/appdata/homeassistant:/config
 
 Network=t3_proxy
 
+AddCapability=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_ADMIN
+
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.homeassistant-rtr.entrypoints=websecure"
