@@ -14,16 +14,6 @@ Network=host
 
 AddCapability=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_ADMIN
 
-Label="traefik.enable=true"
-## HTTP Routers
-Label="traefik.http.routers.homeassistant-rtr.entrypoints=websecure"
-Label="traefik.http.routers.homeassistant-rtr.rule=Host(`homeassistant.$DOMAINNAME`)"
-## Middlewares
-Label="traefik.http.routers.homeassistant-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
-Label="traefik.http.routers.homeassistant-rtr.service=homeassistant-svc"
-Label="traefik.http.services.homeassistant-svc.loadbalancer.server.port=8123"
-
 NoNewPrivileges=true
 
 AutoUpdate=registry
