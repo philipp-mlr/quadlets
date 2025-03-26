@@ -59,8 +59,8 @@ Exec=--global.checkNewVersion=true \
     --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.delayBeforeCheck=90 \
     --metrics.prometheus=true \
     --metrics.prometheus.buckets=0.1,0.3,1.2,5.0 \
-    --experimental.plugins.crowdsec-bouncer-traefik-plugin.modulename=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin \
-    --experimental.plugins.crowdsec-bouncer-traefik-plugin.version=v1.4.1
+    --experimental.plugins.middlewares-traefik-bouncer.modulename=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin \
+    --experimental.plugins.middlewares-traefik-bouncer.version=v1.4.1
 HealthCmd=CMD traefik healthcheck --ping
 
 Label="traefik.enable=true"
