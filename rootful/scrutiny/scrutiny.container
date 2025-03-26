@@ -28,7 +28,7 @@ AddDevice=/dev/nvme1
 AutoUpdate=registry
 
 [Service]
-Restart=always
+Restart=on-failure
 TimeoutStartSec=900
 
 [Install]

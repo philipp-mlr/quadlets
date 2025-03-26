@@ -32,7 +32,7 @@ AutoUpdate=registry
 Timezone=local
 
 [Service]
-Restart=always
+Restart=on-failure
 TimeoutStartSec=900
 
 [Install]
