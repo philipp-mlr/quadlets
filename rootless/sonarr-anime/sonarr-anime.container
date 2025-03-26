@@ -18,7 +18,7 @@ Network=t3_proxy
 Label="traefik.enable=true"
 ## HTTP Routers Auth Bypass
 Label="traefik.http.routers.sonarr-anime-rtr-bypass.entrypoints=websecure"
-Label="traefik.http.routers.sonarr-anime-rtr-bypass.rule=Host(`sonarr-anime.$DOMAINNAME`) && (Header(`X-Api-Key`, `$SONAR_ANIME_API_KEY`) || Query(`apikey`, `$sonarr-anime_API_KEY`))"
+Label="traefik.http.routers.sonarr-anime-rtr-bypass.rule=Host(`sonarr-anime.$DOMAINNAME`) && (Header(`X-Api-Key`, `$SONAR_ANIME_API_KEY`) || Query(`apikey`, `$SONAR_ANIME_API_KEY`))"
 Label="traefik.http.routers.sonarr-anime-rtr-bypass.priority=100"
 ## HTTP Routers
 Label="traefik.http.routers.sonarr-anime-rtr.entrypoints=websecure"

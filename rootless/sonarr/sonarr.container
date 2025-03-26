@@ -18,7 +18,7 @@ Network=t3_proxy
 Label="traefik.enable=true"
 ## HTTP Routers Auth Bypass
 Label="traefik.http.routers.sonarr-rtr-bypass.entrypoints=websecure"
-Label="traefik.http.routers.sonarr-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME`) && (Header(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$sonarr_API_KEY`))"
+Label="traefik.http.routers.sonarr-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME`) && (Header(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$SONARR_API_KEY`))"
 Label="traefik.http.routers.sonarr-rtr-bypass.priority=100"
 ## HTTP Routers
 Label="traefik.http.routers.sonarr-rtr.entrypoints=websecure"
