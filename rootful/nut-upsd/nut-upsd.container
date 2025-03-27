@@ -15,8 +15,6 @@ PublishPort=3493:3493
 # Give container access to USB devices
 AddDevice=/dev/bus/usb 
 
-NoNewPrivileges=true
-
 AutoUpdate=registry
 
 Timezone=local
