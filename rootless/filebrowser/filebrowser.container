@@ -20,7 +20,7 @@ Volume=/mnt/disks/downloads:/data/downloads
 Label="traefik.enable=true"
 ## HTTP Routers
 Label="traefik.http.routers.filebrowser-rtr.entrypoints=websecure"
-Label="traefik.http.routers.filebrowser-rtr.rule=Host(`filebrowser.$DOMAINNAME`)"
+Label="traefik.http.routers.filebrowser-rtr.rule=Host(`files.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.filebrowser-rtr.middlewares=chain-authelia@file"
 ## HTTP Services
