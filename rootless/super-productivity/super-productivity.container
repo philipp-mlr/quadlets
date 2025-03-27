@@ -1,0 +1,33 @@
+[Unit]
+Description=Super Productivity 
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=super-productivity
+Image=docker.io/johannesjo/super-productivity:latest
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.super-productivity-rtr.entrypoints=websecure"
+Label="traefik.http.routers.super-productivity-rtr.rule=Host(`tasks.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.super-productivity-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.super-productivity-rtr.service=super-productivity-svc"
+Label="traefik.http.services.super-productivity-svc.loadbalancer.server.port=80"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
