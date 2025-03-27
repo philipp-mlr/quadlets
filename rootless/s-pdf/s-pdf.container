@@ -1,0 +1,33 @@
+[Unit]
+Description=s-pdf
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=s-pdf
+Image=docker.io/frooodle/s-pdf:latest
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.s-pdf-rtr.entrypoints=websecure"
+Label="traefik.http.routers.s-pdf-rtr.rule=Host(`pdf.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.s-pdf-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.s-pdf-rtr.service=s-pdf-svc"
+Label="traefik.http.services.s-pdf-svc.loadbalancer.server.port=8080"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
