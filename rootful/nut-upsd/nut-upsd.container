@@ -6,6 +6,7 @@ After=network-online.target
 [Container]
 ContainerName=nut-upsd
 Image=docker.io/instantlinux/nut-upsd
+EnvironmentFile=nut-upsd.env
 
 Network=podman
 
