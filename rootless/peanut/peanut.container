@@ -1,0 +1,36 @@
+[Unit]
+Description=peanut
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=peanut
+Image=docker.io/brandawg93/peanut:latest
+EnvironmentFile=peanut.env
+
+Volume=/mnt/cache/appdata/peanut:/root/.peanut"
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.peanut-rtr.entrypoints=websecure"
+Label="traefik.http.routers.peanut-rtr.rule=Host(`peanut.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.peanut-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.peanut-rtr.service=peanut-svc"
+Label="traefik.http.services.peanut-svc.loadbalancer.server.port=8080"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
