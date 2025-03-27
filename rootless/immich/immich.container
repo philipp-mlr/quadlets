@@ -24,7 +24,7 @@ Label="traefik.http.routers.immich-rtr.entrypoints=websecure"
 Label="traefik.http.routers.immich-rtr.rule=Host(`photos.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.immich-rtr.middlewares=chain-no-auth@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.immich-rtr.service=immich-svc"
 Label="traefik.http.services.immich-svc.loadbalancer.server.port=2283"
 

@@ -27,7 +27,7 @@ Label="traefik.http.routers.radarr-anime-rtr.priority=99"
 ## Middlewares
 Label="traefik.http.routers.radarr-anime-rtr-bypass.middlewares=chain-no-auth@file"
 Label="traefik.http.routers.radarr-anime-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.radarr-anime-rtr.service=radarr-anime-svc"
 Label="traefik.http.routers.radarr-anime-rtr-bypass.service=radarr-anime-svc"
 Label="traefik.http.services.radarr-anime-svc.loadbalancer.server.port=7878"

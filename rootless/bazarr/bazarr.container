@@ -24,7 +24,7 @@ Label="traefik.http.routers.bazarr-rtr.entrypoints=websecure"
 Label="traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.bazarr-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.bazarr-rtr.service=bazarr-svc"
 Label="traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
 

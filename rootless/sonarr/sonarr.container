@@ -27,7 +27,7 @@ Label="traefik.http.routers.sonarr-rtr.priority=99"
 ## Middlewares
 Label="traefik.http.routers.sonarr-rtr-bypass.middlewares=chain-no-auth@file"
 Label="traefik.http.routers.sonarr-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.sonarr-rtr.service=sonarr-svc"
 Label="traefik.http.routers.sonarr-rtr-bypass.service=sonarr-svc"
 Label="traefik.http.services.sonarr-svc.loadbalancer.server.port=8989"

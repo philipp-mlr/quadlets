@@ -23,7 +23,7 @@ Label="traefik.http.routers.homepage-rtr.entrypoints=websecure"
 Label="traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.homepage-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.homepage-rtr.service=homepage-svc"
 Label="traefik.http.services.homepage-svc.loadbalancer.server.port=3000"
 

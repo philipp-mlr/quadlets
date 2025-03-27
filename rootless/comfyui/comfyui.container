@@ -20,7 +20,7 @@ Label="traefik.http.routers.comfyui-rtr.entrypoints=websecure"
 Label="traefik.http.routers.comfyui-rtr.rule=Host(`gen.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.comfyui-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.comfyui-rtr.service=comfyui-svc"
 Label="traefik.http.services.comfyui-svc.loadbalancer.server.port=8188"
 

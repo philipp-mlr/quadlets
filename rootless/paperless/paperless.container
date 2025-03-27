@@ -29,7 +29,7 @@ Label="traefik.http.routers.paperless-rtr.entrypoints=websecure"
 Label="traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.paperless-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.paperless-rtr.service=paperless-svc"
 Label="traefik.http.services.paperless-svc.loadbalancer.server.port=8000"
 

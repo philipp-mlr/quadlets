@@ -19,7 +19,7 @@ Label="traefik.http.routers.portainer-rtr.entrypoints=websecure"
 Label="traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.portainer-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.portainer-rtr.service=portainer-svc"
 Label="traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
 

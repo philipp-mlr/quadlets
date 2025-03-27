@@ -19,7 +19,7 @@ Label="traefik.http.routers.tautulli-rtr.entrypoints=websecure"
 Label="traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.tautulli-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.tautulli-rtr.service=tautulli-svc"
 Label="traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
 

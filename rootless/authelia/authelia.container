@@ -23,7 +23,7 @@ Label="traefik.http.routers.authelia-rtr.entrypoints=websecure"
 Label="traefik.http.routers.authelia-rtr.rule=Host(`auth.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.authelia-rtr.middlewares=chain-no-auth@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.authelia-rtr.service=authelia-svc"
 Label="traefik.http.services.authelia-svc.loadbalancer.server.port=9091"
 

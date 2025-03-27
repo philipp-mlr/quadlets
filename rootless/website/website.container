@@ -16,7 +16,7 @@ Label="traefik.http.routers.tautwebsiteulli-rtr.entrypoints=websecure"
 Label="traefik.http.routers.website-rtr.rule=Host(`$PUBLIC_DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.website-rtr.middlewares=chain-no-auth-public@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.website-rtr.service=website-svc"
 Label="traefik.http.services.website-svc.loadbalancer.server.port=1323"
 

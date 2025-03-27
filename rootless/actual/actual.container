@@ -18,7 +18,7 @@ Label="traefik.http.routers.actual-rtr.entrypoints=websecure"
 Label="traefik.http.routers.actual-rtr.rule=Host(`budget.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.actual-rtr.middlewares=chain-authelia@file"
-## HTTP Servicesnoauth
+## HTTP Services
 Label="traefik.http.routers.actual-rtr.service=actual-svc"
 Label="traefik.http.services.actual-svc.loadbalancer.server.port=5006"
 
