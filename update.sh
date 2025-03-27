@@ -37,6 +37,7 @@ update_config() {
   local sudo_prefix=""
   local systemctl_reload="systemctl --user daemon-reload"
   local is_rootful=false
+  local env_vars=()
 
   if [[ "$config_dir" == "/etc/containers/systemd/rootful" ]]; then
     sudo_prefix="sudo"
@@ -63,18 +64,17 @@ update_config() {
     echo -e "  ❌ Failed to copy configuration!\n"
   fi
 
-  # Apply root .env variables to the current environment
+  # Load environment variables from root .env file
   if [[ -f "./.env" ]]; then
     while IFS= read -r line; do
       if [[ "$line" =~ ^([^#=]+)=(.*)$ ]]; then
         export "${BASH_REMATCH[1]}=${BASH_REMATCH[2]}"
-        # Optional: Echo the variable being set
-        # echo "    Applying root env: ${BASH_REMATCH[1]}=\"${BASH_REMATCH[2]}\""
+        env_vars+=("${BASH_REMATCH[1]}=${BASH_REMATCH[2]}")
       fi
     done < "./.env"
   fi
 
-  # Check for empty environment variables in the container files
+  # Apply environment variables to container files
   ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
     for env_file in "$@"; do
       while IFS= read -r line; do
@@ -91,15 +91,10 @@ update_config() {
     exit 1
   fi
 
-  # Replace environment variables in the container files
-  ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
-    for env_file in "$@"; do
-      while IFS= read -r line; do
-        if [[ "$line" =~ ^([^#=]+)=(.*)$ ]]; then
-          export "${BASH_REMATCH[1]}=${BASH_REMATCH[2]}"
-        fi
-      done < "$env_file"
-      envsubst < ${env_file%.env}.container > ${env_file%.env}.container.new && mv ${env_file%.env}.container.new ${env_file%.env}.container
+  # Replace environment variables in container files even if no .env file exists in $config_dir
+  ${sudo_prefix} find "$config_dir" -name "*.container" -exec sh -c '
+    for container_file in "$@"; do
+      envsubst < "$container_file" > "$container_file.new" && mv "$container_file.new" "$container_file"
     done
   ' sh {} +
 
