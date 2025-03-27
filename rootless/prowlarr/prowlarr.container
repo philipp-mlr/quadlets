@@ -1,0 +1,36 @@
+[Unit]
+Description=prowlarr
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=prowlarr
+Image=ghcr.io/linuxserver/prowlarr:latest
+EnvironmentFile=./prowlarr.env
+
+Volume=/mnt/cache/appdata/prowlarr:/config
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.prowlarr-rtr.entrypoints=websecure"
+Label="traefik.http.routers.prowlarr-rtr.rule=Host(`prowlarr.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.prowlarr-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.prowlarr-rtr.service=prowlarr-svc"
+Label="traefik.http.services.prowlarr-svc.loadbalancer.server.port=9696"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
