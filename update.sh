@@ -6,7 +6,7 @@ start_services() {
   find "$service_dir" -name "*.container" -print0 | while IFS= read -r -d $'\0' service_file; do
     local service_name=$(basename "$service_file" .container)
     local status
-    
+
     if [[ "$service_dir" == "/etc/containers/systemd/rootful" ]]; then
       status=$(sudo systemctl is-active "$service_name")
     else
@@ -15,7 +15,7 @@ start_services() {
 
     if [[ "$status" != "active" ]]; then
       echo -e "\n  ▶️ Starting service: $service_name"
-      
+
       if [[ "$service_dir" == "/etc/containers/systemd/rootful" ]]; then
         sudo systemctl start "$service_name"
       else
@@ -50,8 +50,8 @@ update_config() {
   ${sudo_prefix} rm -rf "$config_dir" || true
 
   if [[ "$is_rootful" == true ]]; then
-      echo -e "\n  📂 Creating new rootful configuration directory..."
-      ${sudo_prefix} mkdir -p "$config_dir"
+    echo -e "\n  📂 Creating new rootful configuration directory..."
+    ${sudo_prefix} mkdir -p "$config_dir"
   fi
 
   echo -e "\n  📂 Copying new configuration..."
@@ -61,6 +61,17 @@ update_config() {
     echo -e "  ✅ Configuration copied successfully.\n"
   else
     echo -e "  ❌ Failed to copy configuration!\n"
+  fi
+
+  # Apply root .env variables to the current environment
+  if [[ -f "./.env" ]]; then
+    while IFS= read -r line; do
+      if [[ "$line" =~ ^([^#=]+)=(.*)$ ]]; then
+        export "${BASH_REMATCH[1]}=${BASH_REMATCH[2]}"
+        # Optional: Echo the variable being set
+        # echo "    Applying root env: ${BASH_REMATCH[1]}=\"${BASH_REMATCH[2]}\""
+      fi
+    done < "./.env"
   fi
 
   # Check for empty environment variables in the container files
