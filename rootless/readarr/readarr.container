@@ -1,0 +1,39 @@
+[Unit]
+Description=Readarr
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=readarr
+Image=docker.io/hotio/readarr:latest
+EnvironmentFile=./readarr.env
+
+Volume=/mnt/cache/appdata/readarr:/config
+Volume=/mnt/disks/media/metadata/readarr:/config/MediaCover
+Volume=/mnt/disks/media/books:/books
+Volume=/mnt/disks/downloads:/downloads
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers Auth
+Label="traefik.http.routers.readarr-rtr.entrypoints=websecure"
+Label="traefik.http.routers.readarr-rtr.rule=Host(`readarr.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.readarr-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.readarr-rtr.service=readarr-svc"
+Label="traefik.http.services.readarr-svc.loadbalancer.server.port=8787"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
