@@ -10,7 +10,7 @@ Image=docker.io/adguard/adguardhome
 Network=host
 PublishPort=53:53/tcp
 PublishPort=53:53/udp
-PublishPort=22310:80
+PublishPort=22310:22310
 
 #Network=macvlan0
 #IP=192.168.2.150
