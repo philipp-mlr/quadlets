@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# 🚀 Function to start services in a given directory
 start_services() {
   local service_dir="$1"
 
@@ -32,7 +31,6 @@ start_services() {
   done
 }
 
-# 🛠️ Function to update systemd configuration
 update_config() {
   local config_dir="$1"
   local source_dir="./$(basename "$config_dir")"
@@ -109,7 +107,6 @@ update_config() {
   start_services "$config_dir"
 }
 
-# 🚀 Main script execution
 update_config ~/.config/containers/systemd/rootless
 update_config /etc/containers/systemd/rootful
 
