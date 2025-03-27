@@ -7,8 +7,13 @@ After=network-online.target
 ContainerName=adguardhome
 Image=docker.io/adguard/adguardhome
 
-Network=macvlan0
-IP=192.168.2.150
+Network=host
+PublishPort=53:53/tcp
+PublishPort=53:53/udp
+PublishPort=22310:80
+
+#Network=macvlan0
+#IP=192.168.2.150
 
 Volume=/mnt/cache/appdata/adguardhome/work:/opt/adguardhome/work
 Volume=/mnt/cache/appdata/adguardhome/conf:/opt/adguardhome/conf
