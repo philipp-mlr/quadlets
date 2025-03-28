@@ -6,7 +6,6 @@ After=network-online.target
 [Container]
 ContainerName=actual
 Image=ghcr.io/actualbudget/actual:edge
-EnvironmentFile=actual.env
 
 Volume=/mnt/cache/appdata/actual:/data
 
