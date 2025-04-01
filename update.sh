@@ -14,7 +14,7 @@ start_services() {
     fi
 
     if [[ "$status" != "active" ]]; then
-      echo -e "\n  ▶️ Starting service: $service_name"
+      echo -e "\n  ▶️ Starting service: $service_name"
 
       if [[ "$service_dir" == "/etc/containers/systemd/rootful" ]]; then
         sudo systemctl start "$service_name"
@@ -23,9 +23,9 @@ start_services() {
       fi
 
       if [[ $? -eq 0 ]]; then
-        echo -e "  ✅ Service $service_name started successfully.\n"
+        echo -e "  ✅ Service $service_name started successfully.\n"
       else
-        echo -e "  ❌ Failed to start service $service_name.\n"
+        echo -e "  ❌ Failed to start service $service_name.\n"
       fi
     fi
   done
@@ -47,21 +47,21 @@ update_config() {
 
   echo -e "\n🔄 Updating systemd $(basename "$config_dir") configuration..."
 
-  echo -e "\n  🗑️ Removing old configuration..."
+  echo -e "\n  🗑️ Removing old configuration..."
   ${sudo_prefix} rm -rf "$config_dir" || true
 
   if [[ "$is_rootful" == true ]]; then
-    echo -e "\n  📂 Creating new rootful configuration directory..."
+    echo -e "\n  📂 Creating new rootful configuration directory..."
     ${sudo_prefix} mkdir -p "$config_dir"
   fi
 
-  echo -e "\n  📂 Copying new configuration..."
+  echo -e "\n  📂 Copying new configuration..."
   ${sudo_prefix} cp -r "$source_dir/." "$config_dir/"
 
   if [[ $? -eq 0 ]]; then
-    echo -e "  ✅ Configuration copied successfully.\n"
+    echo -e "  ✅ Configuration copied successfully.\n"
   else
-    echo -e "  ❌ Failed to copy configuration!\n"
+    echo -e "  ❌ Failed to copy configuration!\n"
   fi
 
   # Load environment variables from root .env file
@@ -71,7 +71,7 @@ update_config() {
         export "${BASH_REMATCH[1]}=${BASH_REMATCH[2]}"
         env_vars+=("${BASH_REMATCH[1]}=${BASH_REMATCH[2]}")
       fi
-    done < "./.env"
+    done < "./env"
   fi
 
   # Apply environment variables to container files
@@ -87,24 +87,28 @@ update_config() {
   ' sh {} +
 
   if [[ $? -ne 0 ]]; then
-    echo -e "  ❌ Exiting due to empty environment variables.\n"
+    echo -e "  ❌ Exiting due to empty environment variables.\n"
     exit 1
   fi
 
-  # Replace environment variables in container files even if no .env file exists in $config_dir
+  # Replace environment variables in container files, including local .env files
   ${sudo_prefix} find "$config_dir" -name "*.container" -exec sh -c '
     for container_file in "$@"; do
+      local env_file="${container_file%.container}.env"
+      if [[ -f "$env_file" ]]; then
+        source "$env_file"
+      fi
       envsubst < "$container_file" > "$container_file.new" && mv "$container_file.new" "$container_file"
     done
   ' sh {} +
 
-  echo -e "\n  🔄 Reloading systemd..."
+  echo -e "\n  🔄 Reloading systemd..."
   $systemctl_reload
 
   if [[ $? -eq 0 ]]; then
-    echo -e "  ✅ Systemd reloaded successfully.\n"
+    echo -e "  ✅ Systemd reloaded successfully.\n"
   else
-    echo -e "  ❌ Failed to reload systemd!\n"
+    echo -e "  ❌ Failed to reload systemd!\n"
   fi
 
   echo -e "✅ $(basename "$config_dir") configuration updated.\n"
