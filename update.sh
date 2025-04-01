@@ -71,11 +71,11 @@ update_config() {
         export "${BASH_REMATCH[1]}=${BASH_REMATCH[2]}"
         env_vars+=("${BASH_REMATCH[1]}=${BASH_REMATCH[2]}")
       fi
-    done < "./env"
+    done < "./.env"
   fi
 
   # Apply environment variables to container files
-  ${sudo_prefix} find "$config_dir" -name "*.env" -exec sh -c '
+  ${sudo_prefix} find "$config_dir" -name "*.env" -exec bash -c '
     for env_file in "$@"; do
       while IFS= read -r line; do
         if [[ "$line" =~ ^([^#=]+)=[[:space:]]*$ ]]; then
@@ -84,7 +84,7 @@ update_config() {
         fi
       done < "$env_file"
     done
-  ' sh {} +
+  ' bash {} +
 
   if [[ $? -ne 0 ]]; then
     echo -e "  ❌ Exiting due to empty environment variables.\n"
@@ -92,7 +92,7 @@ update_config() {
   fi
 
   # Replace environment variables in container files, including local .env files
-  ${sudo_prefix} find "$config_dir" -name "*.container" -exec sh -c '
+  ${sudo_prefix} find "$config_dir" -name "*.container" -exec bash -c '
     for container_file in "$@"; do
       local env_file="${container_file%.container}.env"
       if [[ -f "$env_file" ]]; then
@@ -100,7 +100,7 @@ update_config() {
       fi
       envsubst < "$container_file" > "$container_file.new" && mv "$container_file.new" "$container_file"
     done
-  ' sh {} +
+  ' bash {} +
 
   echo -e "\n  🔄 Reloading systemd..."
   $systemctl_reload
