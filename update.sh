@@ -4,8 +4,7 @@ start_services() {
   local service_dir="$1"
 
   find "$service_dir" -name "*.container" -print0 | while IFS= read -r -d $'\0' service_file; do
-    local service_name
-    service_name=$(basename "$service_file" .container)
+    local service_name=$(basename "$service_file" .container)
     local status
 
     if [[ "$service_dir" == "/etc/containers/systemd/rootful" ]]; then
@@ -69,10 +68,8 @@ update_config() {
   if [[ -f "./.env" ]]; then
     while IFS= read -r line || [[ -n "$line" ]]; do
       if [[ "$line" =~ ^([^#=]+)=(.*)$ ]]; then
-        key="${BASH_REMATCH[1]}"
-        value="${BASH_REMATCH[2]}"
-        export "$key"="$value"
-        env_vars+=("$key=$value")
+        export "${BASH_REMATCH[1]}"="${BASH_REMATCH[2]}"
+        env_vars+=("${BASH_REMATCH[1]}=${BASH_REMATCH[2]}")
       fi
     done < "./.env"
   fi
@@ -99,11 +96,19 @@ update_config() {
     for container_file in "$@"; do
       env_file="${container_file%.container}.env"
       if [[ -f "$env_file" ]]; then
-        set -a  # Export all variables automatically
-        . "$env_file"
-        set +a  # Stop automatic export
+        while IFS= read -r line || [[ -n "$line" ]]; do
+          if [[ "$line" =~ ^([^#=]+)=(.*)$ ]]; then
+            key="${BASH_REMATCH[1]}"
+            value="${BASH_REMATCH[2]}"
+
+            # Escape Sonderzeichen für sicheres Exportieren
+            value=$(printf "%q" "$value")
+
+            export "$key"="$value"
+          fi
+        done < "$env_file"
       fi
-      export | envsubst < "$container_file" > "$container_file.new" && mv "$container_file.new" "$container_file"
+      envsubst < "$container_file" > "$container_file.new" && mv "$container_file.new" "$container_file"
     done
   ' bash {} +
 
