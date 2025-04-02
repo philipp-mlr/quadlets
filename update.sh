@@ -64,7 +64,7 @@ update_config() {
     echo -e "  ❌ Failed to copy configuration!\n"
   fi
 
-  # Load environment variables from root .env file
+  echo -e "\n  🔃 Load global environment file"
   if [[ -f "./.env" ]]; then
     while IFS= read -r line; do
       if [[ "$line" =~ ^([^#=]+)=(.*)$ ]]; then
@@ -74,7 +74,7 @@ update_config() {
     done < "./.env"
   fi
 
-  # Apply environment variables to container files
+  echo -e "\n  🔄 Checking for empty environment variables..."
   ${sudo_prefix} find "$config_dir" -name "*.env" -exec bash -c '
     for env_file in "$@"; do
       while IFS= read -r line; do
@@ -91,7 +91,7 @@ update_config() {
     exit 1
   fi
 
-  # Replace environment variables in container files, including local .env files
+  echo -e "\n  🔄 Replacing environment variables in container files"
   ${sudo_prefix} find "$config_dir" -name "*.container" -exec bash -c '
     for container_file in "$@"; do
       local env_file="${container_file%.container}.env"
