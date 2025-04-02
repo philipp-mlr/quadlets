@@ -94,7 +94,7 @@ update_config() {
   echo -e "\n  🔄 Replacing environment variables in container files"
   ${sudo_prefix} find "$config_dir" -name "*.container" -exec bash -c '
     for container_file in "$@"; do
-      local env_file="${container_file%.container}.env"
+      env_file="${container_file%.container}.env"
       if [[ -f "$env_file" ]]; then
         source "$env_file"
       fi
