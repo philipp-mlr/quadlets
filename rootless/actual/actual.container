@@ -5,7 +5,7 @@ After=network-online.target
 
 [Container]
 ContainerName=actual
-Image=ghcr.io/actualbudget/actual:edge
+Image=ghcr.io/actualbudget/actual:latest
 
 Volume=/mnt/cache/appdata/actual:/data
 
