@@ -1,10 +1,10 @@
 [Unit]
-Description=hoarder-chrome
+Description=karakeep-chrome
 Wants=network-online.target
 After=network-online.target
 
 [Container]
-ContainerName=hoarder-chrome
+ContainerName=karakeep-chrome
 Image= gcr.io/zenika-hub/alpine-chrome:123
 
 Network=t3_proxy
