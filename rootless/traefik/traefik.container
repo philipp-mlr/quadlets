@@ -66,7 +66,7 @@ Exec=--global.checkNewVersion=true \
 HealthCmd=CMD traefik healthcheck --ping
 
 Label="traefik.enable=true"
-Label=# HTTP Routers
+# HTTP Routers
 Label="traefik.http.routers.traefik-rtr.entrypoints=websecure"
 Label="traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME`)"
  # Some people had 404s without this
