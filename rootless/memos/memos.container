@@ -13,7 +13,7 @@ Network=t3_proxy
 
 Label="traefik.enable=true"
 ## HTTP Routers
-Label="traefik.http.routers.memos-rtr.entrypoints=websecure"1
+Label="traefik.http.routers.memos-rtr.entrypoints=websecure"
 Label="traefik.http.routers.memos-rtr.rule=Host(`notes.$DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.memos-rtr.middlewares=chain-authelia@file"
