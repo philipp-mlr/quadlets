@@ -1,0 +1,35 @@
+[Unit]
+Description=Memos note-taking
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=memos
+Image=docker.io/neosmemo/memos:latest
+
+Volume=/mnt/cache/appdata/memos:/var/opt/memos
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.memos-rtr.entrypoints=websecure"1
+Label="traefik.http.routers.memos-rtr.rule=Host(`notes.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.memos-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.memos-rtr.service=memos-svc"
+Label="traefik.http.services.memos-svc.loadbalancer.server.port=5230"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
