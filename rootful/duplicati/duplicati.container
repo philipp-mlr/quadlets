@@ -7,7 +7,7 @@ After=network-online.target
 ContainerName=duplicati
 Image=lscr.io/linuxserver/duplicati:latest
 
-Network=t3_proxy
+Network=podman
 
 Volume=/mnt/cache/appdata/duplicati/config:/config
 
@@ -15,15 +15,7 @@ Volume=/mnt/cache/appdata:/mnt/cache/appdata:ro
 Volume=/mnt/disks/media:/mnt/disks/media:ro
 Volume=/home/philipp:/home/philipp:ro
 
-Label="traefik.enable=true"
-## HTTP Routers
-Label="traefik.http.routers.duplicati-rtr.entrypoints=websecure"
-Label="traefik.http.routers.duplicati-rtr.rule=Host(`backup.$DOMAINNAME`)"
-## Middlewares
-Label="traefik.http.routers.duplicati-rtr.middlewares=chain-authelia@file"
-## HTTP Services
-Label="traefik.http.routers.duplicati-rtr.service=duplicati-svc"
-Label="traefik.http.services.duplicati-svc.loadbalancer.server.port=8200"
+PublishPort=8200:8200
 
 NoNewPrivileges=true
 
