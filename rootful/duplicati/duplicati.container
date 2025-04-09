@@ -6,6 +6,7 @@ After=network-online.target
 [Container]
 ContainerName=duplicati
 Image=lscr.io/linuxserver/duplicati:latest
+EnvironmentFile=duplicati.env
 
 Network=podman
 
