@@ -17,8 +17,6 @@ Volume=/home/philipp:/home/philipp:ro
 
 PublishPort=8200:8200
 
-NoNewPrivileges=true
-
 AutoUpdate=registry
 
 Timezone=local
