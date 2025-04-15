@@ -8,7 +8,7 @@ ContainerName=overseerr
 Image=lscr.io/linuxserver/overseerr:latest
 EnvironmentFile=overseerr.env
 
-Volume=/mnt/cache/appdata/overseerr/config:/config
+Volume=$APPDATA_DIR/overseerr/config:/config
 
 Network=t3_proxy
 

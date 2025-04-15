@@ -8,10 +8,10 @@ ContainerName=sonarr
 Image=lscr.io/linuxserver/sonarr:latest
 EnvironmentFile=./sonarr.env
 
-Volume=/mnt/cache/appdata/sonarr:/config
-Volume=/mnt/disks/media/metadata/sonarr:/config/MediaCover
-Volume=/mnt/disks/media/tv:/tv
-Volume=/mnt/disks/downloads:/downloads
+Volume=$APPDATA_DIR/sonarr:/config
+Volume=$MEDIA_DIR/metadata/sonarr:/config/MediaCover
+Volume=$MEDIA_DIR/tv:/tv
+Volume=$DOWNLOAD_DIR:/downloads
 
 Network=t3_proxy
 

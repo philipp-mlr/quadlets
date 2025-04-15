@@ -8,7 +8,7 @@ ContainerName=qdirstat
 Image=docker.io/jlesage/qdirstat:latest
 EnvironmentFile=qdirstat.env
 
-Volume=/mnt/cache/appdata/qdirstat/config:/config:rw
+Volume=$APPDATA_DIR/qdirstat/config:/config:rw
 Volume=/mnt/disks:/mnt/disks:rw
 Volume=/mnt/cache:/mnt/cache:rw
 

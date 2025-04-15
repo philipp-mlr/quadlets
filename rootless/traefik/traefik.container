@@ -8,9 +8,9 @@ ContainerName=traefik
 Image=docker.io/traefik:latest
 EnvironmentFile=./traefik.env
 
-Volume=/mnt/cache/appdata/traefik/rules/:/rules
-Volume=/mnt/cache/appdata/traefik/acme/acme.json:/acme.json
-Volume=/mnt/cache/service/logs/traefik:/logs
+Volume=$APPDATA_DIR/traefik/rules/:/rules
+Volume=$APPDATA_DIR/traefik/acme/acme.json:/acme.json
+Volume=$SERVICE_DIR/logs/traefik:/logs
 Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
 
 AddCapability=CAP_NET_RAW

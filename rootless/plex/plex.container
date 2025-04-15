@@ -8,13 +8,13 @@ ContainerName=plex
 Image=docker.io/plexinc/pms-docker:latest
 EnvironmentFile=./plex.env
 
-Volume=/mnt/cache/appdata/plexms:/config
-Volume=/mnt/disks/downloads:/data/downloads
-Volume=/mnt/disks/media:/data/media
+Volume=$APPDATA_DIR/plexms:/config
+Volume=$DOWNLOAD_DIR:/data/downloads
+Volume=$MEDIA_DIR:/data/media
 # Optional. See why the folders below are mounted as volumes https://github.com/htpcBeginner/docker-traefik/discussions/147
-Volume=/mnt/disks/media/metadata/plex/Cache:/config/Library/Application Support/Plex Media Server/Cache
-Volume=/mnt/disks/media/metadata/plex/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
-Volume=/mnt/disks/media/metadata/plex/Media:/config/Library/Application Support/Plex Media Server/Media
+Volume=$MEDIA_DIR/metadata/plex/Cache:/config/Library/Application Support/Plex Media Server/Cache
+Volume=$MEDIA_DIR/metadata/plex/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
+Volume=$MEDIA_DIR/metadata/plex/Media:/config/Library/Application Support/Plex Media Server/Media
 # Offload transcoding to RAM if you have enough RAM
 Volume=/dev/shm:/transcode
 

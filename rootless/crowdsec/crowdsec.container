@@ -8,11 +8,11 @@ ContainerName=crowdsec
 Image=docker.io/crowdsecurity/crowdsec
 EnvironmentFile=./crowdsec.env
 
-Volume=/mnt/cache/appdata/crowdsec/data:/var/lib/crowdsec/data
-Volume=/mnt/cache/appdata/crowdsec/config:/etc/crowdsec
+Volume=$APPDATA_DIR/crowdsec/data:/var/lib/crowdsec/data
+Volume=$APPDATA_DIR/crowdsec/config:/etc/crowdsec
 
 Volume=/var/log:/var/log:ro
-Volume=/mnt/cache/service/logs/:/logs/:ro
+Volume=$SERVICE_DIR/logs/:/logs/:ro
 
 Network=t3_proxy
 

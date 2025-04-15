@@ -8,7 +8,7 @@ ContainerName=openwebui
 Image=ghcr.io/open-webui/open-webui:cuda
 EnvironmentFile=openwebui.env
 
-Volume=/mnt/cache/appdata/open_webui:/app/backend/data
+Volume=$APPDATA_DIR/open_webui:/app/backend/data
 
 Network=t3_proxy
 

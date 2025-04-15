@@ -7,7 +7,7 @@ After=network-online.target
 ContainerName=peanut
 Image=docker.io/brandawg93/peanut:latest
 
-Volume=/mnt/cache/appdata/peanut:/config
+Volume=$APPDATA_DIR/peanut:/config
 
 Network=t3_proxy
 

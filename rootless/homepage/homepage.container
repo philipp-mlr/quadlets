@@ -8,8 +8,8 @@ ContainerName=homepage
 Image=ghcr.io/gethomepage/homepage:latest
 EnvironmentFile=homepage.env
 
-Volume=/mnt/cache/appdata/homepage:/app/config
-Volume=/mnt/cache/appdata/homepage/icons:/app/public/icons
+Volume=$APPDATA_DIR/homepage:/app/config
+Volume=$APPDATA_DIR/homepage/icons:/app/public/icons
 Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock
 
 Network=t3_proxy

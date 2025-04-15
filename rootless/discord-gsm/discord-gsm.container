@@ -8,7 +8,7 @@ After=network-online.target
 ContainerName=discord-gsm
 Image=docker.io/discordgsm/discord-game-server-monitor:latest
 EnvironmentFile=./discord-gsm.env
-Volume=/mnt/cache/appdata/discord-gsm:/usr/src/app/data
+Volume=$APPDATA_DIR/discord-gsm:/usr/src/app/data
 Network=t3_proxy
 Exec=python main.py
 

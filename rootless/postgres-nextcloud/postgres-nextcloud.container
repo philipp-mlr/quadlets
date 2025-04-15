@@ -10,7 +10,7 @@ EnvironmentFile=postgres-nextcloud.env
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/postgres_nextcloud:/var/lib/postgresql/data
+Volume=$APPDATA_DIR/postgres_nextcloud:/var/lib/postgresql/data
 
 Secret=postgres_password,target=/run/secrets/postgres_password
 

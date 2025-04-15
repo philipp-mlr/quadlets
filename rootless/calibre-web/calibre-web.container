@@ -8,10 +8,10 @@ ContainerName=calibre-web
 Image=docker.io/crocodilestick/calibre-web-automated:latest
 EnvironmentFile=./calibre-web.env
 
-Volume=/mnt/cache/appdata/calibre_web/config:/config
-Volume=/mnt/cache/appdata/calibre_web/library:/calibre-library
-Volume=/mnt/cache/appdata/calibre_web/consume:/cwa-book-ingest
-Volume=/mnt/disks/media/books/:/books
+Volume=$APPDATA_DIR/calibre_web/config:/config
+Volume=$APPDATA_DIR/calibre_web/library:/calibre-library
+Volume=$APPDATA_DIR/calibre_web/consume:/cwa-book-ingest
+Volume=$MEDIA_DIR/books/:/books
 
 Network=t3_proxy
 

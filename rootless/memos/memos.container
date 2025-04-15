@@ -7,7 +7,7 @@ After=network-online.target
 ContainerName=memos
 Image=docker.io/neosmemo/memos:latest
 
-Volume=/mnt/cache/appdata/memos:/var/opt/memos
+Volume=$APPDATA_DIR/memos:/var/opt/memos
 
 Network=t3_proxy
 

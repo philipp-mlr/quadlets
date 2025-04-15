@@ -10,11 +10,11 @@ EnvironmentFile=bazarr.env
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/bazarr:/config
-Volume=/mnt/disks/media/movies:/movies
-Volume=/mnt/disks/media/tv:/tv
-Volume=/mnt/disks/media/anime:/anime
-Volume=/mnt/disks/media/anime-movies:/anime-movies
+Volume=$APPDATA_DIR/bazarr:/config
+Volume=$MEDIA_DIR/movies:/movies
+Volume=$MEDIA_DIR/tv:/tv
+Volume=$MEDIA_DIR/anime:/anime
+Volume=$MEDIA_DIR/anime-movies:/anime-movies
 
 NoNewPrivileges=true
 

@@ -7,7 +7,7 @@ After=network-online.target
 ContainerName=actual
 Image=ghcr.io/actualbudget/actual:latest
 
-Volume=/mnt/cache/appdata/actual:/data
+Volume=$APPDATA_DIR/actual:/data
 
 Network=t3_proxy
 

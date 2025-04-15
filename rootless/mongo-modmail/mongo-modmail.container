@@ -7,7 +7,7 @@ After=network-online.target
 ContainerName=mongo-modmail
 Image=docker.io/mongo
 EnvironmentFile=./mongo-modmail.env
-Volume=/mnt/cache/appdata/mongo_modmail:/data/db
+Volume=$APPDATA_DIR/mongo_modmail:/data/db
 Network=t3_proxy
 
 NoNewPrivileges=true

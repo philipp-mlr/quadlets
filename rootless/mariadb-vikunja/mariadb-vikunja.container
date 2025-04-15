@@ -12,7 +12,7 @@ Exec=--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/mariadb-vikunja:/var/lib/mysql
+Volume=$APPDATA_DIR/mariadb-vikunja:/var/lib/mysql
 
 HealthCmd="CMD-SHELL mysqladmin ping -h localhost -u $$MYSQL_USER --password=$$MYSQL_PASSWORD"
 HealthInterval=2s

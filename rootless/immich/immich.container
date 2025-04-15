@@ -8,8 +8,8 @@ ContainerName=immich
 Image=ghcr.io/immich-app/immich-server:release
 EnvironmentFile=./immich.env
 
-Volume=/mnt/cache/appdata/immich/server:/home/runner
-Volume=/mnt/disks/media/photos:/usr/src/app/upload
+Volume=$APPDATA_DIR/immich/server:/home/runner
+Volume=$MEDIA_DIR/photos:/usr/src/app/upload
 Volume=/etc/localtime:/etc/localtime:ro
 
 Network=t3_proxy

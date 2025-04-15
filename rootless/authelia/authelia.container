@@ -8,7 +8,7 @@ ContainerName=authelia
 Image=docker.io/authelia/authelia:latest
 EnvironmentFile=./authelia.env
 
-Volume=/mnt/cache/appdata/authelia:/config
+Volume=$APPDATA_DIR/authelia:/config
 
 Network=t3_proxy
 

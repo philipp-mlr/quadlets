@@ -10,7 +10,7 @@ EnvironmentFile=meilisearch.env
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/meilisearch:/meili_data
+Volume=$APPDATA_DIR/meilisearch:/meili_data
 
 NoNewPrivileges=true
 

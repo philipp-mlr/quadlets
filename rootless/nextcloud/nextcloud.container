@@ -8,7 +8,7 @@ ContainerName=nextcloud
 Image=docker.io/nextcloud:latest
 EnvironmentFile=nextcloud.env
 
-Volume=/mnt/cache/appdata/nextcloud/:/var/www/html
+Volume=$APPDATA_DIR/nextcloud/:/var/www/html
 
 Network=t3_proxy
 

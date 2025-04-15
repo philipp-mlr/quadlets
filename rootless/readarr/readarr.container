@@ -8,10 +8,10 @@ ContainerName=readarr
 Image=docker.io/hotio/readarr:latest
 EnvironmentFile=./readarr.env
 
-Volume=/mnt/cache/appdata/readarr:/config
-Volume=/mnt/disks/media/metadata/readarr:/config/MediaCover
-Volume=/mnt/disks/media/books:/books
-Volume=/mnt/disks/downloads:/downloads
+Volume=$APPDATA_DIR/readarr:/config
+Volume=$MEDIA_DIR/metadata/readarr:/config/MediaCover
+Volume=$MEDIA_DIR/books:/books
+Volume=$DOWNLOAD_DIR:/downloads
 
 Network=t3_proxy
 

@@ -8,9 +8,9 @@ ContainerName=code
 Image=lscr.io/linuxserver/code-server:latest
 EnvironmentFile=code.env
 
-Volume=/mnt/cache/appdata/code_server:/config
-Volume=/mnt/cache/appdata/:/config/workspace/appdata
-Volume=/mnt/cache/service/:/config/workspace/service
+Volume=$APPDATA_DIR/code_server:/config
+Volume=$APPDATA_DIR/:/config/workspace/appdata
+Volume=$SERVICE_DIR/:/config/workspace/service
 Volume=/home/philipp/nixos-config:/config/workspace/nixos-config
 Volume=/home/philipp/quadlets:/config/workspace/quadlets
 

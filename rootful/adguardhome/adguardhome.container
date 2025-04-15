@@ -17,8 +17,8 @@ PublishPort=22310:22310
 #Network=macvlan0
 #IP=192.168.2.150
 
-Volume=/mnt/cache/appdata/adguardhome/work:/opt/adguardhome/work
-Volume=/mnt/cache/appdata/adguardhome/conf:/opt/adguardhome/conf
+Volume=$APPDATA_DIR/adguardhome/work:/opt/adguardhome/work
+Volume=$APPDATA_DIR/adguardhome/conf:/opt/adguardhome/conf
 
 NoNewPrivileges=true
 

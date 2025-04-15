@@ -10,7 +10,7 @@ EnvironmentFile=paperless-ai.env
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/paperless_ai:/app/data
+Volume=$APPDATA_DIR/paperless_ai:/app/data
 
 Label="traefik.enable=true"
 ## HTTP Routers

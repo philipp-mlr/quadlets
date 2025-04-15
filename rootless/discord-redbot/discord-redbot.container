@@ -7,7 +7,7 @@ After=network-online.target
 ContainerName=discord-redbot
 Image=docker.io/phasecorex/red-discordbot:latest
 EnvironmentFile=./discord-redbot.env
-Volume=/mnt/cache/appdata/discord-redbot:/data
+Volume=$APPDATA_DIR/discord-redbot:/data
 Network=t3_proxy
 
 NoNewPrivileges=true

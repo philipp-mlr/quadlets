@@ -7,7 +7,7 @@ After=network-online.target
 ContainerName=immich-machine-learning
 Image=ghcr.io/immich-app/immich-machine-learning:release-cuda
 
-Volume=/mnt/cache/appdata/immich/machine-learning:/cache
+Volume=$APPDATA_DIR/immich/machine-learning:/cache
 
 Network=t3_proxy
 

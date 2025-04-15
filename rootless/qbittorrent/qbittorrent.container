@@ -10,8 +10,8 @@ EnvironmentFile=qbittorrent.env
 
 Network=container:gluetun
 
-Volume=/mnt/cache/appdata/qbittorrent:/config
-Volume=/mnt/disks/downloads/torrents/:/downloads/torrents
+Volume=$APPDATA_DIR/qbittorrent:/config
+Volume=$DOWNLOAD_DIR/torrents/:/downloads/torrents
 
 HealthCmd=curl -sf https://example.com  || exit 1
 HealthInterval=1m

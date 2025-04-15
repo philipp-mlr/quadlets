@@ -8,7 +8,7 @@ ContainerName=portainer
 Image=docker.io/portainer/portainer-ee:latest
 EnvironmentFile=portainer.env
 
-Volume=/mnt/cache/appdata/portainer/data:/data
+Volume=$APPDATA_DIR/portainer/data:/data
 Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
 
 Network=t3_proxy

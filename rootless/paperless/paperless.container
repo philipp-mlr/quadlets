@@ -8,10 +8,10 @@ ContainerName=paperless
 Image=docker.io/paperlessngx/paperless-ngx:latest
 EnvironmentFile=paperless.env
 
-Volume=/mnt/cache/appdata/paperless/data:/usr/src/paperless/data
-Volume=/mnt/cache/appdata/paperless/media:/usr/src/paperless/media
-Volume=/mnt/cache/appdata/paperless/export:/usr/src/paperless/export
-Volume=/mnt/cache/appdata/paperless/consume:/usr/src/paperless/consume
+Volume=$APPDATA_DIR/paperless/data:/usr/src/paperless/data
+Volume=$APPDATA_DIR/paperless/media:/usr/src/paperless/media
+Volume=$APPDATA_DIR/paperless/export:/usr/src/paperless/export
+Volume=$APPDATA_DIR/paperless/consume:/usr/src/paperless/consume
 
 Network=t3_proxy
 

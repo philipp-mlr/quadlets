@@ -10,7 +10,7 @@ EnvironmentFile=postgres-immich.env
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/postgres_immich:/var/lib/postgresql/data
+Volume=$APPDATA_DIR/postgres_immich:/var/lib/postgresql/data
 
 Secret=postgres_password,target=/run/secrets/postgres_password
 

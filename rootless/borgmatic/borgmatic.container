@@ -10,15 +10,15 @@ EnvironmentFile=borgmatic.env
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/borgmatic/.state/borgmatic:/root/.local/state/borgmatic
-Volume=/mnt/cache/appdata/borgmatic/.cache/borg:/root/.cache/borg
-Volume=/mnt/cache/appdata/borgmatic/.ssh:/root/.ssh
-Volume=/mnt/cache/appdata/borgmatic/.config/borg:/root/.config/borg
-Volume=/mnt/cache/appdata/borgmatic/borgmatic.d:/etc/borgmatic.d/
-Volume=/mnt/cache/appdata/borgmatic/repository:/mnt/borg-repository
+Volume=$APPDATA_DIR/borgmatic/.state/borgmatic:/root/.local/state/borgmatic
+Volume=$APPDATA_DIR/borgmatic/.cache/borg:/root/.cache/borg
+Volume=$APPDATA_DIR/borgmatic/.ssh:/root/.ssh
+Volume=$APPDATA_DIR/borgmatic/.config/borg:/root/.config/borg
+Volume=$APPDATA_DIR/borgmatic/borgmatic.d:/etc/borgmatic.d/
+Volume=$APPDATA_DIR/borgmatic/repository:/mnt/borg-repository
 
-Volume=/mnt/cache/appdata:/mnt/cache/appdata:ro
-Volume=/mnt/disks/media:/mnt/disks/media:ro
+Volume=$APPDATA_DIR:$APPDATA_DIR:ro
+Volume=$MEDIA_DIR:/mnt/disks/media:ro
 
 NoNewPrivileges=true
 

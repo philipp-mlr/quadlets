@@ -10,7 +10,7 @@ EnvironmentFile=ollama.env
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/ollama:/root/.ollama
+Volume=$APPDATA_DIR/ollama:/root/.ollama
 
 AddDevice=nvidia.com/gpu=all
 

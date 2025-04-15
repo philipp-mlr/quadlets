@@ -7,7 +7,7 @@ After=network-online.target mongo-modmail.service
 ContainerName=discord-modmail
 Image=ghcr.io/modmail-dev/modmail:master
 EnvironmentFile=./discord-modmail.env
-Volume=/mnt/cache/appdata/discord_modmail:/usr/src/app/data
+Volume=$APPDATA_DIR/discord_modmail:/usr/src/app/data
 Network=t3_proxy
 
 NoNewPrivileges=true

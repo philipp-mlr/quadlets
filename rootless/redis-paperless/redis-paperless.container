@@ -9,7 +9,7 @@ Image=docker.io/redis:latest
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/redis_paperless:/data
+Volume=$APPDATA_DIR/redis_paperless:/data
 
 NoNewPrivileges=true
 

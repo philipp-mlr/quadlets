@@ -8,10 +8,10 @@ ContainerName=radarr-anime
 Image=lscr.io/linuxserver/radarr:latest
 EnvironmentFile=./radarr-anime.env
 
-Volume=/mnt/cache/appdata/radarr-anime:/config
-Volume=/mnt/disks/media/metadata/radarr-anime:/config/MediaCover
-Volume=/mnt/disks/media/movies:/movies
-Volume=/mnt/disks/downloads:/downloads
+Volume=$APPDATA_DIR/radarr-anime:/config
+Volume=$MEDIA_DIR/metadata/radarr-anime:/config/MediaCover
+Volume=$MEDIA_DIR/movies:/movies
+Volume=$DOWNLOAD_DIR:/downloads
 
 Network=t3_proxy
 

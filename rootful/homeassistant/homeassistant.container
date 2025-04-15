@@ -8,7 +8,7 @@ ContainerName=homeassistant
 Image=docker.io/homeassistant/home-assistant:latest
 EnvironmentFile=./homeassistant.env
 
-Volume=/mnt/cache/appdata/homeassistant:/config
+Volume=$APPDATA_DIR/homeassistant:/config
 
 Network=host
 

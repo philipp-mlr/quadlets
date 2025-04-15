@@ -9,7 +9,7 @@ Image=docker.io/crowdsecurity/cloudflare-bouncer
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
+Volume=$APPDATA_DIR/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
 
 NoNewPrivileges=true
 

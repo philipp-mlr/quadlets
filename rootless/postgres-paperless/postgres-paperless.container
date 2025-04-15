@@ -10,7 +10,7 @@ EnvironmentFile=postgres-paperless.env
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/postgres_paperless:/var/lib/postgresql/data
+Volume=$APPDATA_DIR/postgres_paperless:/var/lib/postgresql/data
 
 Secret=postgres_password,target=/run/secrets/postgres_password
 

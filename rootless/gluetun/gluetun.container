@@ -8,7 +8,7 @@ ContainerName=gluetun
 Image=docker.io/qmcgaw/gluetun:latest
 EnvironmentFile=gluetun.env
 
-Volume=/mnt/cache/appdata/gluetun:/gluetun
+Volume=$APPDATA_DIR/gluetun:/gluetun
 
 Network=t3_proxy
 

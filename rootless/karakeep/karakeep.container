@@ -12,7 +12,7 @@ ExposeHostPort=3000
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/karakeep:/data
+Volume=$APPDATA_DIR/karakeep:/data
 
 Label="traefik.enable=true"
 ## HTTP Routers

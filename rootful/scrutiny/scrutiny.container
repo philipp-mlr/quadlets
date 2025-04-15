@@ -11,7 +11,7 @@ Network=podman
 
 PublishPort=8088:8080
 
-Volume=/mnt/cache/appdata/scrutiny:/opt/scrutiny/config
+Volume=$APPDATA_DIR/scrutiny:/opt/scrutiny/config
 Volume=/run/udev:/run/udev:ro
 
 AddCapability=SYS_RAWIO SYS_ADMIN

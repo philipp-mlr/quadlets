@@ -8,9 +8,9 @@ ContainerName=onlyoffice
 Image=docker.io/onlyoffice/documentserver:latest
 EnvironmentFile=onlyoffice.env
 
-Volume=/mnt/cache/appdata/onlyoffice/logs:/var/log/onlyoffice
-Volume=/mnt/cache/appdata/onlyoffice/cache:/var/lib/onlyoffice
-Volume=/mnt/cache/appdata/onlyoffice/db:/var/lib/postgresql
+Volume=$APPDATA_DIR/onlyoffice/logs:/var/log/onlyoffice
+Volume=$APPDATA_DIR/onlyoffice/cache:/var/lib/onlyoffice
+Volume=$APPDATA_DIR/onlyoffice/db:/var/lib/postgresql
 
 Network=t3_proxy
 

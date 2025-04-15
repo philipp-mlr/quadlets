@@ -9,7 +9,7 @@ Image=docker.io/redis:latest
 
 Network=t3_proxy
 
-Volume=/mnt/cache/appdata/redis_authelia:/data
+Volume=$APPDATA_DIR/redis_authelia:/data
 
 NoNewPrivileges=true
 

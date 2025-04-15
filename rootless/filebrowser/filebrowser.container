@@ -10,12 +10,12 @@ Image=docker.io/hurlenko/filebrowser:latest
 Network=t3_proxy
 
 # app data
-Volume=/mnt/cache/appdata/filebrowser:/config
+Volume=$APPDATA_DIR/filebrowser:/config
 
-Volume=/mnt/cache/service:/data/service
-Volume=/mnt/cache/appdata:/data/appdata
-Volume=/mnt/disks/media:/data/media
-Volume=/mnt/disks/downloads:/data/downloads
+Volume=$SERVICE_DIR:/data/service
+Volume=$APPDATA_DIR:/data/appdata
+Volume=$MEDIA_DIR:/data/media
+Volume=$DOWNLOAD_DIR:/data/downloads
 
 Label="traefik.enable=true"
 ## HTTP Routers

@@ -10,8 +10,8 @@ EnvironmentFile=sabnzbd.env
 
 Network=container:gluetun
 
-Volume=/mnt/cache/appdata/sabnzbd:/config
-Volume=/mnt/disks/downloads/usenet/:/downloads/usenet
+Volume=$APPDATA_DIR/sabnzbd:/config
+Volume=$DOWNLOAD_DIR/usenet/:/downloads/usenet
 
 NoNewPrivileges=true
 
