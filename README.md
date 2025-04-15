@@ -1,48 +1,73 @@
-# quadlets
+# quadlets 
+A cozy home for my Podman Quadlets
 
-A place for my podman quadlets
+## Overview 🗂️
 
-## Overview
+This repository contains a collection of **Quadlet files** I use to define containers as **systemd services** on my homelab.  
+Quadlets are a neat way to manage Podman containers — they let you configure everything declaratively using `.container` unit files.
 
-This repository contains a collection of quadlet files for managing podman containers. Quadlets are systemd unit files that simplify the management of podman containers by providing a declarative way to define and run containers.
+## Getting Started 🚀
 
-## Getting Started
+Wanna use these Quadlets? Here's how:
 
-To use the quadlets in this repository, follow these steps:
+### 1. Clone the Repo 📥
 
-1. Clone the repository:
+```sh
+git clone https://github.com/philipp-mlr/quadlets
+cd quadlets
+```
 
-   ```sh
-   git clone https://github.com/yourusername/quadlets.git
-   cd quadlets
-   ```
+### 2. Set Up Environment Variables
 
-2. Copy the desired quadlet files to the appropriate systemd directory:
+There are two types of `.env` files:
 
-   ```sh
-   sudo cp *.service /etc/systemd/system/
-   ```
+#### 🔹 Global `.env` file
 
-3. Reload the systemd manager configuration:
+Located in the root directory ([.env.example](https://github.com/philipp-mlr/quadlets/blob/main/.env.example)), this file defines environment variables used across multiple containers.  
+I use this mostly to work around the fact that systemd labels don't support env vars — adjust it to your needs (e.g., domains).
 
-   ```sh
-   sudo systemctl daemon-reload
-   ```
+Copy and edit the example:
 
-4. Enable and start the quadlet service:
-   ```sh
-   sudo systemctl enable <quadlet-service-name>
-   sudo systemctl start <quadlet-service-name>
-   ```
+```sh
+mv .env.example .env
+nano .env
+```
 
-## Contributing
+#### 🔹 Container-specific `.env` files
 
-Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+Each container can have its own environment file in its directory.  
+These files define container-specific variables.
 
-## License
+Example for Portainer:
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+```sh
+cd ./rootless/portainer
+mv portainer.env.example portainer.env
+nano portainer.env
+```
 
-## Contact
+### 3. Update Systemd & Start Everything 🔁
 
-For any questions or suggestions, please open an issue or contact the repository owner.
+Use the `update.sh` script in the root folder — it handles everything for you:
+
+- Copies `rootless` files → `~/.config/containers/systemd/rootless`
+- Copies `rootful` files → `/etc/containers/systemd/rootful` (🔒 root required)
+- Substitutes all env vars in `.container` files using your global `.env`
+- Reloads systemd
+- Starts all services 💨
+
+Run it like this:
+
+```sh
+chmod +x ./update.sh
+./update.sh
+```
+
+## Contact 💬
+
+Found a bug? Got a cool idea?  
+Open an [issue](https://github.com/philipp-mlr/quadlets/issues) or reach out — happy to connect!
+
+---
+
+Let me know if you'd like this translated to German or want a short TL;DR section too!
