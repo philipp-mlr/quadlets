@@ -1,5 +1,8 @@
 # quadlets 
-A cozy home for my Podman Quadlets
+A cozy home for my Podman Quadlets.
+
+I originally managed my containers like everyone else with docker. But I have decided to migrate my container stack to podman.
+The docker version of this isn't getting any more updates but if you are interested you can check it out [here](https://github.com/philipp-mlr/docker-services).
 
 ## Overview 🗂️
 
