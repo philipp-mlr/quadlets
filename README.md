@@ -67,7 +67,3 @@ chmod +x ./update.sh
 
 Found a bug? Got a cool idea?  
 Open an [issue](https://github.com/philipp-mlr/quadlets/issues) or reach out — happy to connect!
-
----
-
-Let me know if you'd like this translated to German or want a short TL;DR section too!
