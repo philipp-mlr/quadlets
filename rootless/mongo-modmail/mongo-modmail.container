@@ -1,0 +1,24 @@
+[Unit]
+Description=MongoDB for Modmail
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=mongo-modmail
+Image=docker.io/mongo
+EnvironmentFile=./mongo-modmail.env
+Volume=$APPDATA_DIR/mongo_modmail:/data/db
+Network=t3_proxy
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

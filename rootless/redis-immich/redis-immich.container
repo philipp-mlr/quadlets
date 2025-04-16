@@ -1,0 +1,25 @@
+[Unit]
+Description=In memory cache for Immich
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=redis-immich
+Image=docker.io/redis:latest
+
+Network=t3_proxy
+
+Volume=$APPDATA_DIR/redis_immich:/data
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

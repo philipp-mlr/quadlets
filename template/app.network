@@ -1,0 +1,7 @@
+[Network]
+# (Mandatory) Subnet for the network
+Subnet=192.168.99.0/24  
+# (Mandatory) Gateway IP address
+Gateway=192.168.99.1    
+# (Optional) Custom label for the network
+Label=

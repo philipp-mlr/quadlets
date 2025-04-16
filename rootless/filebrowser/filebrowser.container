@@ -1,0 +1,41 @@
+[Unit]
+Description=filebrowser
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=filebrowser
+Image=docker.io/hurlenko/filebrowser:latest
+
+Network=t3_proxy
+
+# app data
+Volume=$APPDATA_DIR/filebrowser:/config
+
+Volume=$SERVICE_DIR:/data/service
+Volume=$APPDATA_DIR:/data/appdata
+Volume=$MEDIA_DIR:/data/media
+Volume=$DOWNLOAD_DIR:/data/downloads
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.filebrowser-rtr.entrypoints=websecure"
+Label="traefik.http.routers.filebrowser-rtr.rule=Host(`files.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.filebrowser-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.filebrowser-rtr.service=filebrowser-svc"
+Label="traefik.http.services.filebrowser-svc.loadbalancer.server.port=8080"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

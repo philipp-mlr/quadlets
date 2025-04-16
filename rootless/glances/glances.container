@@ -1,0 +1,40 @@
+[Unit]
+Description=glances
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=glances
+Image=docker.io/nicolargo/glances:latest
+EnvironmentFile=glances.env
+
+Volume=/mnt/disks/:/mnt/disks:ro
+Volume=/mnt/cache/:/mnt/cache:ro
+Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock
+
+Network=t3_proxy
+
+AddDevice=nvidia.com/gpu=all
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.glances-rtr.entrypoints=websecure"
+Label="traefik.http.routers.glances-rtr.rule=Host(`glances.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.glances-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.glances-rtr.service=glances-svc"
+Label="traefik.http.services.glances-svc.loadbalancer.server.port=61208"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

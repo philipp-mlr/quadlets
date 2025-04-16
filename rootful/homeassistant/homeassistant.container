@@ -1,0 +1,26 @@
+[Unit]
+Description=homeassistant
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=homeassistant
+Image=docker.io/homeassistant/home-assistant:latest
+EnvironmentFile=./homeassistant.env
+
+Volume=$APPDATA_DIR/homeassistant:/config
+
+Network=host
+
+AddCapability=CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_SYS_ADMIN CAP_NET_RAW
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

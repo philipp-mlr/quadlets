@@ -1,0 +1,45 @@
+[Unit]
+Description=Postgres Immich
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=postgres-immich
+Image=docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:739cdd626151ff1f796dc95a6591b55a714f341c737e27f045019ceabf8e8c52
+EnvironmentFile=postgres-immich.env
+
+Network=t3_proxy
+
+Volume=$APPDATA_DIR/postgres_immich:/var/lib/postgresql/data
+
+Secret=postgres_password,target=/run/secrets/postgres_password
+
+Exec=postgres \
+      -c shared_preload_libraries=vectors.so \
+      -c 'search_path="$$user", public, vectors' \
+      -c logging_collector=on \
+      -c max_wal_size=2GB \
+      -c shared_buffers=512MB \
+      -c wal_compression=on
+
+HealthCmd=/bin/sh -c '\
+  pg_isready -d "$POSTGRES_DB" -U "$POSTGRES_USER" || exit 1; \
+  Chksum=$(psql -d "$POSTGRES_DB" -U "$POSTGRES_USER" -tA -c "SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database"); \
+  echo "checksum failure count is $Chksum"; \
+  [ "$Chksum" = "0" ] || exit 1 '
+HealthInterval=5m
+HealthStartPeriod=5m
+HealthStartupInterval=30s
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

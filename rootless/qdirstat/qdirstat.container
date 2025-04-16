@@ -1,0 +1,38 @@
+[Unit]
+Description=qdirstat
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=qdirstat
+Image=docker.io/jlesage/qdirstat:latest
+EnvironmentFile=qdirstat.env
+
+Volume=$APPDATA_DIR/qdirstat/config:/config:rw
+Volume=/mnt/disks:/mnt/disks:rw
+Volume=/mnt/cache:/mnt/cache:rw
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.qdirstat-rtr.entrypoints=websecure"
+Label="traefik.http.routers.qdirstat-rtr.rule=Host(`qdirstat.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.qdirstat-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.qdirstat-rtr.service=qdirstat-svc"
+Label="traefik.http.services.qdirstat-svc.loadbalancer.server.port=5800"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

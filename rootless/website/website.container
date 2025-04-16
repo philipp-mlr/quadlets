@@ -1,0 +1,34 @@
+[Unit]
+Description=Personal Website
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=website
+Image=ghcr.io/philipp-mlr/philipp.software:main
+EnvironmentFile=website.env
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.tautwebsiteulli-rtr.entrypoints=websecure"
+Label="traefik.http.routers.website-rtr.rule=Host(`$PUBLIC_DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.website-rtr.middlewares=chain-no-auth-public@file"
+## HTTP Services
+Label="traefik.http.routers.website-rtr.service=website-svc"
+Label="traefik.http.services.website-svc.loadbalancer.server.port=1323"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

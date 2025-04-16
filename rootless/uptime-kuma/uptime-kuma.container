@@ -1,0 +1,36 @@
+[Unit]
+Description=uptime-kuma
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=uptime-kuma
+Image=docker.io/louislam/uptime-kuma:latest
+
+Volume=$APPDATA_DIR/uptime-kuma:/app/data
+Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.uptime-rtr.entrypoints=websecure"
+Label="traefik.http.routers.uptime-rtr.rule=Host(`uptime.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.uptime-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.uptime-rtr.service=uptime-svc"
+Label="traefik.http.services.uptime-svc.loadbalancer.server.port=3001"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

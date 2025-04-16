@@ -1,0 +1,35 @@
+[Unit]
+Description=Actual Budget
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=actual
+Image=ghcr.io/actualbudget/actual:latest
+
+Volume=$APPDATA_DIR/actual:/data
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.actual-rtr.entrypoints=websecure"
+Label="traefik.http.routers.actual-rtr.rule=Host(`budget.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.actual-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.actual-rtr.service=actual-svc"
+Label="traefik.http.services.actual-svc.loadbalancer.server.port=5006"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,36 @@
+[Unit]
+Description=Overseerr
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=overseerr
+Image=lscr.io/linuxserver/overseerr:latest
+EnvironmentFile=overseerr.env
+
+Volume=$APPDATA_DIR/overseerr/config:/config
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.overseerr-rtr.entrypoints=websecure"
+Label="traefik.http.routers.overseerr-rtr.rule=Host(`overseerr.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.overseerr-rtr.middlewares=chain-no-auth@file"
+## HTTP Services
+Label="traefik.http.routers.overseerr-rtr.service=overseerr-svc"
+Label="traefik.http.services.overseerr-svc.loadbalancer.server.port=5055"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

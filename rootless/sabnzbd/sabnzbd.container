@@ -1,0 +1,27 @@
+[Unit]
+Description=SABnzbd
+Wants=network-online.target
+After=network-online.target gluetun.service
+
+[Container]
+ContainerName=sabnzbd
+Image=docker.io/linuxserver/sabnzbd:latest
+EnvironmentFile=sabnzbd.env
+
+Network=container:gluetun
+
+Volume=$APPDATA_DIR/sabnzbd:/config
+Volume=$DOWNLOAD_DIR/usenet/:/downloads/usenet
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

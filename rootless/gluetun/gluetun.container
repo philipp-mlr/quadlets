@@ -1,0 +1,55 @@
+[Unit]
+Description=Gluetun VPN
+Wants=network-online.target
+After=network-online.target 
+
+[Container]
+ContainerName=gluetun
+Image=docker.io/qmcgaw/gluetun:latest
+EnvironmentFile=gluetun.env
+
+Volume=$APPDATA_DIR/gluetun:/gluetun
+
+Network=t3_proxy
+
+AddCapability=CAP_NET_ADMIN
+
+AddDevice=/dev/net/tun
+
+Label="traefik.enable=true"
+## Gluetun Built-in HTTP control server
+Label="traefik.http.routers.gluetun-rtr.rule=Host(`gluetun.$DOMAINNAME`)"
+Label="traefik.http.routers.gluetun-rtr.service=gluetun-svc"
+Label="traefik.http.services.gluetun-svc.loadbalancer.server.port=8000"
+#### qBittorrent
+## HTTP Routers
+Label="traefik.http.routers.qbitorrent-rtr.entrypoints=websecure"
+Label="traefik.http.routers.qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.qbitorrent-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.qbitorrent-rtr.service=qbitorrent-svc"
+Label="traefik.http.services.qbitorrent-svc.loadbalancer.server.port=8095"
+#### SABnzbd
+## HTTP Routers Auth
+Label="traefik.http.routers.sabnzbd-rtr.entrypoints=websecure"
+Label="traefik.http.routers.sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)"
+Label="traefik.http.routers.sabnzbd-rtr.priority=99"
+## Middlewares
+Label="traefik.http.routers.sabnzbd-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.sabnzbd-rtr.service=sabnzbd-svc"
+Label="traefik.http.services.sabnzbd-svc.loadbalancer.server.port=8085"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

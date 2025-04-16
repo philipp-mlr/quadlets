@@ -1,0 +1,8 @@
+# t3_proxy.network
+[Network]
+Driver=bridge
+Gateway=10.0.0.1
+IPAMDriver=host-local
+Label=com.docker.compose.project=service io.podman.compose.project=service
+PodmanArgs=--interface-name podman1
+Subnet=10.0.0.0/24

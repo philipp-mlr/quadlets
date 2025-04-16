@@ -1,0 +1,27 @@
+services:
+  # excalidraw - a web app that offers a clean and intuitive interface for drawing diagrams
+  excalidraw:
+    image: excalidraw/excalidraw:latest
+    container_name: excalidraw
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+    expose:
+      - 80
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.excalidraw-rtr.tls=true"
+      - "traefik.http.routers.excalidraw-rtr.entrypoints=websecure"
+      - "traefik.http.routers.excalidraw-rtr.rule=Host(`draw.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.excalidraw-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.excalidraw-rtr.service=excalidraw-svc"
+      - "traefik.http.services.excalidraw-svc.loadbalancer.server.port=80"

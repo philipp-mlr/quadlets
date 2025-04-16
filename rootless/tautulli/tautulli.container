@@ -1,0 +1,37 @@
+[Unit]
+Description=Tautulli Plex Monitoring
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=tautulli
+Image=lscr.io/linuxserver/tautulli:latest
+EnvironmentFile=tautulli.env
+
+Volume=$APPDATA_DIR/tautulli/config:/config
+Volume=$APPDATA_DIR/plexms/Library/Application Support/Plex Media Server/Logs:/logs:ro
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.tautulli-rtr.entrypoints=websecure"
+Label="traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.tautulli-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.tautulli-rtr.service=tautulli-svc"
+Label="traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,27 @@
+[Unit]
+Description=Gotenberg Document Conversion Server
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=gotenberg
+Image=docker.io/gotenberg/gotenberg:latest
+
+Network=t3_proxy
+
+Exec=gotenberg \
+     --chromium-disable-javascript=true \
+     --chromium-allow-list=file:///tmp/.*
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

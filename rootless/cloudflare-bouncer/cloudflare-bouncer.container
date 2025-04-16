@@ -1,0 +1,25 @@
+[Unit]
+Description=Crowdsec Cloudflare Bouncer
+Wants=network-online.target
+After=network-online.target crowdsec.service
+
+[Container]
+ContainerName=cloudflare-bouncer
+Image=docker.io/crowdsecurity/cloudflare-bouncer
+
+Network=t3_proxy
+
+Volume=$APPDATA_DIR/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

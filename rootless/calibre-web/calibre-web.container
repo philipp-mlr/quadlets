@@ -1,0 +1,39 @@
+[Unit]
+Description=calibre-web
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=calibre-web
+Image=docker.io/crocodilestick/calibre-web-automated:latest
+EnvironmentFile=./calibre-web.env
+
+Volume=$APPDATA_DIR/calibre_web/config:/config
+Volume=$APPDATA_DIR/calibre_web/library:/calibre-library
+Volume=$APPDATA_DIR/calibre_web/consume:/cwa-book-ingest
+Volume=$MEDIA_DIR/books/:/books
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.calibre-web-rtr.entrypoints=websecure"
+Label="traefik.http.routers.calibre-web-rtr.rule=Host(`books.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.calibre-web-rtr.middlewares=chain-no-auth@file"
+## HTTP Services
+Label="traefik.http.routers.calibre-web-rtr.service=calibre-web-svc"
+Label="traefik.http.services.calibre-web-svc.loadbalancer.server.port=8083"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,33 @@
+[Unit]
+Description=it-tools
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=it-tools
+Image=docker.io/corentinth/it-tools:latest
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.it-tools-rtr.entrypoints=websecure"
+Label="traefik.http.routers.it-tools-rtr.rule=Host(`it-tools.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.it-tools-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.it-tools-rtr.service=it-tools-svc"
+Label="traefik.http.services.it-tools-svc.loadbalancer.server.port=80"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

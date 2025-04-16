@@ -1,0 +1,41 @@
+[Unit]
+Description=homepage
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=homepage
+Image=ghcr.io/gethomepage/homepage:latest
+EnvironmentFile=homepage.env
+
+Volume=$APPDATA_DIR/homepage:/app/config
+Volume=$APPDATA_DIR/homepage/icons:/app/public/icons
+Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock
+
+Network=t3_proxy
+
+# Needed for ping
+AddCapability=CAP_NET_RAW
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.homepage-rtr.entrypoints=websecure"
+Label="traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.homepage-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.homepage-rtr.service=homepage-svc"
+Label="traefik.http.services.homepage-svc.loadbalancer.server.port=3000"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

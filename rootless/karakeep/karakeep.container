@@ -1,0 +1,38 @@
+[Unit]
+Description=karakeep
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=karakeep
+Image=ghcr.io/karakeep-app/karakeep:release
+EnvironmentFile=karakeep.env
+
+ExposeHostPort=3000
+
+Network=t3_proxy
+
+Volume=$APPDATA_DIR/karakeep:/data
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.karakeep-rtr.entrypoints=websecure"
+Label="traefik.http.routers.karakeep-rtr.rule=Host(`bookmarks.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.karakeep-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.karakeep-rtr.service=karakeep-svc"
+Label="traefik.http.services.karakeep-svc.loadbalancer.server.port=3000"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

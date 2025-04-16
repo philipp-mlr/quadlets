@@ -1,0 +1,42 @@
+[Unit]
+Description=openwebui
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=openwebui
+Image=ghcr.io/open-webui/open-webui:cuda
+EnvironmentFile=openwebui.env
+
+Volume=$APPDATA_DIR/open_webui:/app/backend/data
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers API
+Label="traefik.http.routers.openwebui-rtr-bypass.entrypoints=websecure"
+Label="traefik.http.routers.openwebui-rtr-bypass.rule=Host(`ai.$DOMAINNAME`) && (PathPrefix(`/api`))"
+Label="traefik.http.routers.openwebui-rtr-bypass.priority=100"
+## HTTP Routers
+Label="traefik.http.routers.openwebui-rtr.entrypoints=websecure"
+Label="traefik.http.routers.openwebui-rtr.rule=Host(`ai.$DOMAINNAME`)"
+Label="traefik.http.routers.openwebui-rtr.priority=99"
+## Middlewares
+Label="traefik.http.routers.openwebui-rtr-bypass.middlewares=chain-no-auth@file"
+Label="traefik.http.routers.openwebui-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.openwebui-rtr.service=openwebui-svc"
+Label="traefik.http.services.openwebui-svc.loadbalancer.server.port=8080"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,100 @@
+[Unit]
+Description=Traefik Reverse Proxy
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=traefik
+Image=docker.io/traefik:latest
+EnvironmentFile=./traefik.env
+
+Volume=$APPDATA_DIR/traefik/rules/:/rules
+Volume=$APPDATA_DIR/traefik/acme/acme.json:/acme.json
+Volume=$SERVICE_DIR/logs/traefik:/logs
+Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
+
+AddCapability=CAP_NET_RAW
+
+Network=t3_proxy
+
+PublishPort=80:80
+PublishPort=443:443
+PublishPort=8081:8081
+
+Secret=cf_token,target=/run/secrets/cf_token
+Secret=htpasswd,target=/run/secrets/htpasswd
+
+Exec=--global.checkNewVersion=true \
+    --global.sendAnonymousUsage=true \
+    --entrypoints.web.address=:80 \
+    --entrypoints.websecure.address=:443 \
+    --entryPoints.ping.address=:8081 \
+    --entrypoints.web.http.redirections.entrypoint.to=websecure \
+    --entrypoints.web.http.redirections.entrypoint.scheme=https \
+    --entrypoints.web.http.redirections.entrypoint.permanent=true \
+    --entrypoints.websecure.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22,127.0.0.1/32,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12 \
+    --api=true \
+    --api.dashboard=true \
+    --ping=true \
+    --log=true \
+    --log.filePath=/logs/traefik.log \
+    --log.level=INFO \
+    --accessLog=true \
+    --accessLog.filePath=/logs/access.log \
+    --accessLog.bufferingSize=100 \
+    --accessLog.filters.statusCodes=204-299,400-499,500-599 \
+    --entrypoints.websecure.http.tls.options=tls-opts@file \
+    --entrypoints.websecure.http.tls.certresolver=dns-cloudflare \
+    --entrypoints.websecure.http.tls.domains[0].main=$DOMAINNAME \
+    --entrypoints.websecure.http.tls.domains[0].sans=*.$DOMAINNAME \
+    --entrypoints.websecure.http.tls.domains[1].main=$PUBLIC_DOMAINNAME \
+    --entrypoints.websecure.http.tls.domains[1].sans=*.$PUBLIC_DOMAINNAME \
+    --providers.docker=true \
+    --providers.docker.exposedByDefault=false \
+    --providers.docker.network=t3_proxy \
+    --providers.file.directory=/rules \
+    --providers.file.watch=true \
+    --certificatesResolvers.dns-cloudflare.acme.email=philipp.mue@protonmail.com \
+    --certificatesResolvers.dns-cloudflare.acme.storage=/acme.json \
+    --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare \
+    --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53 \
+    --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.delayBeforeCheck=90 \
+    --metrics.prometheus=true \
+    --metrics.prometheus.buckets=0.1,0.3,1.2,5.0 \
+    --experimental.plugins.middlewares-traefik-bouncer.modulename=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin \
+    --experimental.plugins.middlewares-traefik-bouncer.version=v1.4.1
+HealthCmd=CMD traefik healthcheck --ping
+
+Label="traefik.enable=true"
+# HTTP Routers
+Label="traefik.http.routers.traefik-rtr.entrypoints=websecure"
+Label="traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME`)"
+ # Some people had 404s without this
+Label="traefik.http.routers.traefik-rtr.tls=true"
+# Comment out this line after first run of traefik to force the use of wildcard certs
+Label="traefik.http.routers.traefik-rtr.tls.certresolver=dns-cloudflare" 
+Label="traefik.http.routers.traefik-rtr.tls.domains[0].main=$DOMAINNAME"
+Label="traefik.http.routers.traefik-rtr.tls.domains[0].sans=*.$DOMAINNAME"
+Label="traefik.http.routers.traefik-rtr.tls.domains[1].main=$PUBLIC_DOMAINNAME"
+Label="traefik.http.routers.traefik-rtr.tls.domains[1].sans=*.$PUBLIC_DOMAINNAME"
+## Services - API
+Label="traefik.http.routers.traefik-rtr.service=api@internal"
+## Healthcheck/ping
+Label="traefik.http.routers.ping.rule=Host(`traefik.$DOMAINNAME`) && Path(`/ping`)"
+Label="traefik.http.routers.ping.tls=true"
+Label="traefik.http.routers.ping.service=ping@internal"
+## Middlewares
+Label="traefik.http.routers.traefik-rtr.middlewares=chain-authelia@file"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=always
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
