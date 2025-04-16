@@ -27,7 +27,9 @@ There are two types of `.env` files:
 #### 🔹 Global `.env` file
 
 Located in the root directory ([.env.example](https://github.com/philipp-mlr/quadlets/blob/main/.env.example)), this file defines environment variables used across multiple containers.  
-I use this mostly to work around the fact that systemd labels don't support env vars — adjust it to your needs (e.g., domains).
+
+I use this mostly to work around the fact that systemd labels don't support env vars — adjust it to your needs (e.g., domains and paths).
+
 
 Copy and edit the example:
 
