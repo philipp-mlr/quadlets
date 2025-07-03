@@ -22,7 +22,7 @@ Label="traefik.http.services.website-svc.loadbalancer.server.port=1323"
 
 NoNewPrivileges=true
 
-AutoUpdate=registry
+AutoUpdate=local
 
 Timezone=local
 
