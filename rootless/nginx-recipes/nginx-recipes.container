@@ -1,0 +1,37 @@
+[Unit]
+Description=nginx-recipes
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=nginx-recipes
+Image=docker.io/nginx:mainline-alpine
+
+Network=t3_proxy
+
+Volume=$APPDATA_DIR/recipes/nginx/:/etc/nginx/conf.d:ro
+Volume=$APPDATA_DIR/recipes/mediafiles:/media:ro
+Volume=$APPDATA_DIR/recipes/staticfiles:/static:ro
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.recipes-rtr.entrypoints=websecure"
+Label="traefik.http.routers.recipes-rtr.rule=Host(`recipes.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.recipes-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.recipes-rtr.service=recipes-svc"
+Label="traefik.http.services.recipes-svc.loadbalancer.server.port=80"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
