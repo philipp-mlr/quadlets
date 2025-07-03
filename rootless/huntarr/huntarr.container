@@ -1,0 +1,36 @@
+[Unit]
+Description=huntarr
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=huntarr
+Image=docker.io/huntarr/huntarr:latest  
+EnvironmentFile=huntarr.env
+
+Volume=$APPDATA_DIR/huntarr:/config
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.huntarr-rtr.entrypoints=websecure"
+Label="traefik.http.routers.huntarr-rtr.rule=Host(`huntarr.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.huntarr-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.huntarr-rtr.service=huntarr-svc"
+Label="traefik.http.services.huntarr-svc.loadbalancer.server.port=9705"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
