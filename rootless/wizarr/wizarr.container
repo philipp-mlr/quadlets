@@ -1,0 +1,37 @@
+[Unit]
+Description=Wizarr  
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=wizarr
+Image=ghcr.io/wizarrrr/wizarr
+EnvironmentFile=./wizarr.env
+
+Volume=$APPDATA_DIR/wizarr/config/database:/data/database
+Volume=$APPDATA_DIR/wizarr/config/wizard:/data/wizard_steps
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.wizarr-rtr.entrypoints=websecure"
+Label="traefik.http.routers.wizarr-rtr.rule=Host(`invite.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.wizarr-rtr.middlewares=chain-no-auth@file"
+## HTTP Services
+Label="traefik.http.routers.wizarr-rtr.service=wizarr-svc"
+Label="traefik.http.services.wizarr-svc.loadbalancer.server.port=5690"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
