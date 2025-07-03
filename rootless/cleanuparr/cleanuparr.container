@@ -1,0 +1,36 @@
+[Unit]
+Description=Cleanuparr  
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=cleanuparr
+Image=ghcr.io/cleanuparr/cleanuparr:latest
+EnvironmentFile=./cleanuparr.env
+
+Volume=$APPDATA_DIR/cleanuparr:/config
+
+Network=t3_proxy
+
+Label="traefik.enable=true"
+## HTTP Routers
+Label="traefik.http.routers.cleanuparr-rtr.entrypoints=websecure"
+Label="traefik.http.routers.cleanuparr-rtr.rule=Host(`cleanuparr.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.cleanuparr-rtr.middlewares=chain-authelia@file"
+## HTTP Services
+Label="traefik.http.routers.cleanuparr-rtr.service=cleanuparr-svc"
+Label="traefik.http.services.cleanuparr-svc.loadbalancer.server.port=11011"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
