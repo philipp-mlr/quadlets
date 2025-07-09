@@ -12,7 +12,7 @@ Network=t3_proxy
 
 Label="traefik.enable=true"
 ## HTTP Routers
-Label="traefik.http.routers.tautwebsiteulli-rtr.entrypoints=websecure"
+Label="traefik.http.routers.website-rtr.entrypoints=websecure"
 Label="traefik.http.routers.website-rtr.rule=Host(`$PUBLIC_DOMAINNAME`)"
 ## Middlewares
 Label="traefik.http.routers.website-rtr.middlewares=chain-no-auth-public@file"
