@@ -21,6 +21,7 @@ Label="traefik.enable=true"
 Label="traefik.http.routers.gluetun-rtr.rule=Host(`gluetun.$DOMAINNAME`)"
 Label="traefik.http.routers.gluetun-rtr.service=gluetun-svc"
 Label="traefik.http.services.gluetun-svc.loadbalancer.server.port=8000"
+
 #### qBittorrent
 ## HTTP Routers
 Label="traefik.http.routers.qbitorrent-rtr.entrypoints=websecure"
@@ -30,6 +31,7 @@ Label="traefik.http.routers.qbitorrent-rtr.middlewares=chain-authelia@file"
 ## HTTP Services
 Label="traefik.http.routers.qbitorrent-rtr.service=qbitorrent-svc"
 Label="traefik.http.services.qbitorrent-svc.loadbalancer.server.port=8095"
+
 #### SABnzbd
 ## HTTP Routers Auth
 Label="traefik.http.routers.sabnzbd-rtr.entrypoints=websecure"
@@ -41,6 +43,14 @@ Label="traefik.http.routers.sabnzbd-rtr.middlewares=chain-authelia@file"
 Label="traefik.http.routers.sabnzbd-rtr.service=sabnzbd-svc"
 Label="traefik.http.services.sabnzbd-svc.loadbalancer.server.port=8085"
 
+## HTTP Routers
+Label="traefik.http.routers.invidioius-rtr.entrypoints=websecure"
+Label="traefik.http.routers.invidioius-rtr.rule=Host(`yt.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.invidioius-rtr.middlewares=chain-no-auth@file"
+## HTTP Services
+Label="traefik.http.routers.invidioius-rtr.service=invidioius-svc"
+Label="traefik.http.services.invidioius-svc.loadbalancer.server.port=3000"
 NoNewPrivileges=true
 
 AutoUpdate=registry

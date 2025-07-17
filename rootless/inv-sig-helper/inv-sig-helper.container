@@ -1,0 +1,30 @@
+[Unit]
+Description=Invidious signature decrypter
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=invidious-signature-helper
+Image=quay.io/invidious/inv-sig-helper:latest
+
+Environment=RUST_LOG=info
+
+Network=container:gluetun
+
+IP=10.0.0.128
+
+Exec=--tcp 0.0.0.0:12999
+
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

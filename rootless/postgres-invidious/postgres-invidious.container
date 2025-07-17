@@ -1,0 +1,30 @@
+[Unit]
+Description=Postgres Invidous
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=postgres-invidious
+Image=docker.io/library/postgres:14
+EnvironmentFile=postgres-invidious.env
+
+Network=container:gluetun
+
+Volume=$APPDATA_DIR/postgres_invidious/data:/var/lib/postgresql/data
+Volume=$APPDATA_DIR/postgres_invidious/config:/config/sql
+Volume=$APPDATA_DIR/postgres_invidious/init-invidious-db.sh:/docker-entrypoint-initdb.d/init-invidious-db.sh
+
+HealthCmd="pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
