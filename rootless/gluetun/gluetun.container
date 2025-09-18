@@ -43,6 +43,7 @@ Label="traefik.http.routers.sabnzbd-rtr.middlewares=chain-authelia@file"
 Label="traefik.http.routers.sabnzbd-rtr.service=sabnzbd-svc"
 Label="traefik.http.services.sabnzbd-svc.loadbalancer.server.port=8085"
 
+#### Invidious
 ## HTTP Routers
 Label="traefik.http.routers.invidioius-rtr.entrypoints=websecure"
 Label="traefik.http.routers.invidioius-rtr.rule=Host(`yt.$DOMAINNAME`)"
@@ -51,6 +52,17 @@ Label="traefik.http.routers.invidioius-rtr.middlewares=chain-no-auth@file"
 ## HTTP Services
 Label="traefik.http.routers.invidioius-rtr.service=invidioius-svc"
 Label="traefik.http.services.invidioius-svc.loadbalancer.server.port=3000"
+
+#### Calibre-Web-Automated-Downloader
+## HTTP Routers
+Label="traefik.http.routers.calibre-web-downloader-rtr.entrypoints=websecure"
+Label="traefik.http.routers.calibre-web-downloader-rtr.rule=Host(`books-download.$DOMAINNAME`)"
+## Middlewares
+Label="traefik.http.routers.calibre-web-downloader-rtr.middlewares=chain-no-auth@file"
+## HTTP Services
+Label="traefik.http.routers.calibre-web-downloader-rtr.service=calibre-web-downloader-svc"
+Label="traefik.http.services.calibre-web-downloader-svc.loadbalancer.server.port=8084"
+
 NoNewPrivileges=true
 
 AutoUpdate=registry

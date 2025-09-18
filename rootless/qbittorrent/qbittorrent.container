@@ -1,7 +1,7 @@
 [Unit]
 Description=qBittorrent
 Wants=network-online.target
-After=network-online.target gluetun.service
+After=network-online.target
 
 [Container]
 ContainerName=qbittorrent

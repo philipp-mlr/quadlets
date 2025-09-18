@@ -5,7 +5,7 @@ After=network-online.target
 
 [Container]
 ContainerName=traefik
-Image=docker.io/traefik:latest
+Image=docker.io/traefik:3.5.2
 EnvironmentFile=./traefik.env
 
 Volume=$APPDATA_DIR/traefik/rules/:/rules
@@ -16,6 +16,9 @@ Volume=/run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
 AddCapability=CAP_NET_RAW
 
 Network=t3_proxy
+
+DNS=1.1.1.1
+DNS=1.0.0.0
 
 PublishPort=80:80
 PublishPort=443:443
@@ -62,7 +65,7 @@ Exec=--global.checkNewVersion=true \
     --metrics.prometheus=true \
     --metrics.prometheus.buckets=0.1,0.3,1.2,5.0 \
     --experimental.plugins.middlewares-traefik-bouncer.modulename=github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin \
-    --experimental.plugins.middlewares-traefik-bouncer.version=v1.4.1
+    --experimental.plugins.middlewares-traefik-bouncer.version=v1.4.4
 HealthCmd=CMD traefik healthcheck --ping
 
 Label="traefik.enable=true"

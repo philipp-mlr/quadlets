@@ -1,0 +1,26 @@
+# discord-gsm.container
+[Unit]
+Description=Discord Game Server Monitor
+Wants=network-online.target
+After=network-online.target
+
+[Container]
+ContainerName=discord-gsm
+Image=docker.io/discordgsm/discord-game-server-monitor:latest
+EnvironmentFile=./discord-gsm.env
+Volume=$APPDATA_DIR/discord-gsm:/usr/src/app/data
+Network=t3_proxy
+Exec=python main.py
+
+NoNewPrivileges=true
+
+AutoUpdate=registry
+
+Timezone=local
+
+[Service]
+Restart=on-failure
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

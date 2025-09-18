@@ -12,7 +12,10 @@ Volume=$APPDATA_DIR/crowdsec/data:/var/lib/crowdsec/data
 Volume=$APPDATA_DIR/crowdsec/config:/etc/crowdsec
 
 Volume=/var/log:/var/log:ro
-Volume=$SERVICE_DIR/logs/:/logs/:ro
+Volume=$SERVICE_DIR/logs/:/logs/traefik/:ro
+Volume=/mnt/cache/appdata/nextcloud/data/nextcloud.log:/logs/nextcloud.log:ro
+Volume=/mnt/cache/appdata/authelia/authelia.log:/logs/authelia.log:ro
+
 
 Network=t3_proxy
 
